@@ -1,0 +1,4 @@
+/*
+ARCHIVO DE DEFINICION DE PROTOCOLO.
+En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
+*/
