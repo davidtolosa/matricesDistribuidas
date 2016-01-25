@@ -28,37 +28,40 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 {
     int n;
    
-
     char * buffer=NULL;
-
-    n = leerBytes (sd, &mjs->header , HEADER_LENGHT );
+	headerMTZ head;
+	bodyMTZ body;
 	
-	if(n !=0 )
-	{	
-		mjs->header.codigo = mjs->header.codigo;
-		mjs->header.lenght = ntohs( mjs->header.lenght);
+    printf("Mensaje para leer \n");
+	n = leerBytes (sd, &head , HEADER_LENGHT );
+	printf("leyo \n");
+	
+/*	if(n !=0 )*/
+/*	{	*/
+/*		mjs->header.codigo = head.codigo;*/
+/*		mjs->header.lenght = ntohs( head.lenght);*/
 
 
-		if (mjs->header.lenght > 0){
-			buffer = (char *) malloc (sizeof(char)*(mjs->header.lenght +1));
-			if (buffer == NULL){
-				perror ( "No se puede asignar memoria" );
-				exit(EXIT_FAILURE);
-			}
-			memset(buffer,0, mjs->header.lenght+1);
+/*		if (mjs->header.lenght > 0){*/
+/*			buffer = (char *) malloc (sizeof(char)*(mjs->header.lenght +1));*/
+/*			if (buffer == NULL){*/
+/*				perror ( "No se puede asignar memoria" );*/
+/*				exit(EXIT_FAILURE);*/
+/*			}*/
+/*			memset(buffer,0, mjs->header.lenght+1);*/
 
-			if (n != 0) {
-				n = leerBytes (sd, buffer, mjs->header.lenght);
-				fflush(stdout);
-				return n;
-			}
-		}
-	}
-	else
-		{ 
-			fflush(stdout);
-			return (n);
-		}
+/*			if (n != 0) {*/
+/*				n = leerBytes (sd, buffer, mjs->header.lenght);*/
+/*				fflush(stdout);*/
+/*				return n;*/
+/*			}*/
+/*		}*/
+/*	}*/
+/*	else*/
+/*		{ */
+/*			fflush(stdout);*/
+/*			return (n);*/
+/*		}*/
   
 }
 
