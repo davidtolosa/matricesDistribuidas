@@ -6,50 +6,24 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include "protocoloMTZ.h"
 
-#define P_SIZE sizeof(struct psuma)
-
-struct psuma {
-	uint16_t v1;
-	uint16_t v2;
-	uint32_t res;
-};
-
-// Función que se encarga de leer un mensaje de aplicacion completo
-// lee exactamente la cantidad de bytes que se pasa}n en el argumento total:
-
-int leer_mensaje ( int sd, char * buffer, int total ) {
-    int bytes;
-    int leido;
-
-    leido = 0;
-    bytes = 1;
-
-    while ( (leido < total) && (bytes > 0) ) {
-
-        bytes = recv ( sd , buffer + leido , total - leido , 0);
-
-        leido = leido + bytes;
-
-    }
-
-    return ( leido );
-
-}
+//#define P_SIZE sizeof(struct psuma)
 
 int main(int argc, char *argv[]) {
 	int n;
 	int sd;
 	int lon;
 	char teclado[512];
-	char buffer[P_SIZE];
+	//char buffer[P_SIZE];
 	struct sockaddr_in servidor;
 	struct sockaddr_in cliente;
 	struct hostent *h;
-	struct psuma *suma;
+	struct protocoloMTZ *msj;
 
-	if (argc < 2) {
-		printf("Debe ejecutar %s (nombre de host)\n",argv[0]);
+	if (argc < 3) {
+		//printf("Debe ejecutar %s (nombre de host)\n",argv[0]);
+		printf("Debe ejecutar nombre de host, worker/cliente");
 		exit (-1);
 	}
 
@@ -70,32 +44,19 @@ int main(int argc, char *argv[]) {
 		exit(-1);
 	}
 
-	suma = (struct psuma *) buffer;
-
-	while (ntohl(suma->res) != 100) {
-
-		printf("Ingrese valor 1: ");
-		fgets(teclado, sizeof(teclado), stdin);
-		teclado[strlen(teclado) - 1] = '\0';
-
-		suma->v1 = htons(atoi(teclado));
-
-		printf("Ingrese valor 2 (sumar 100 para salir): ");
-		fgets(teclado, sizeof(teclado), stdin);
-		teclado[strlen(teclado) - 1] = '\0';
-
-		suma->v2 = htons(atoi(teclado));
-
-		suma->res = htonl(0);
-
-		send ( sd, buffer, P_SIZE, 0 );
-
-		n = leer_mensaje (sd, buffer, P_SIZE );
-
-		printf("La suma de %d y %d es %d\n", ntohs(suma->v1), ntohs(suma->v2), ntohl(suma->res));
-
+	if (strcmp(argv[2],"worker") == 0) {
+		printf("Conectado como Worker\n");
+		//Enviar que es un worker
+	}
+	else if(strcmp(argv[2],"cliente") == 0)
+	{
+		printf("Conectado como Cliente\n");
+		//Enviar que es un cliente
+	}
+	else{
+		printf("Error en el arg[2]\n");
 	}
 
-	close(sd);
 
+	close(sd);
 }
