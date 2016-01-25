@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
 	struct sockaddr_in cliente;
 	struct hostent *h;
 	struct protocoloMTZ *msj;
+	char *datos = NULL;
 
 	if (argc < 3) {
 		//printf("Debe ejecutar %s (nombre de host)\n",argv[0]);
@@ -44,19 +45,29 @@ int main(int argc, char *argv[]) {
 		exit(-1);
 	}
 
+
 	if (strcmp(argv[2],"worker") == 0) {
 		printf("Conectado como Worker\n");
+		datos = malloc( strlen("Hola soy Worker"));
+		memset(datos,0, strlen("Hola soy Worker"));
+    sprintf(datos,"%s","Hola soy Worker");
+
+		enviar_mensaje(sd,SOLICITUD_WORKER,datos);
 		//Enviar que es un worker
 	}
 	else if(strcmp(argv[2],"cliente") == 0)
 	{
 		printf("Conectado como Cliente\n");
+		enviar_mensaje(sd,SOLICITUD_CLIENTE,"Cliente");
 		//Enviar que es un cliente
 	}
 	else{
 		printf("Error en el arg[2]\n");
 	}
 
+	while (1) {
+		/* code */
+	}
 
 	close(sd);
 }
