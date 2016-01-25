@@ -2,6 +2,8 @@
 ARCHIVO DE DEFINICION DE PROTOCOLO.
 En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
 */
+#include "protocoloMTZ.h"
+
 int leerBytes(int sd, void *buffer, int len)
 {
     int byte = 1;
@@ -33,8 +35,8 @@ int leer_mensaje(int sd, protocoloMTZ ** mjs )
     char * buffer=NULL;
 
     n = leerBytes (sd, &head , HEADER_LENGHT );
-    mensaje.header.codigo = head.codigo;
-    mensaje.header.lenght =ntohs( head.lenght);
+    mjs.header.codigo = head.codigo;
+	mjs.header.lenght =ntohs( head.lenght);
 
 /*
     if (encabezado.longitud > 0){
@@ -61,7 +63,7 @@ uint16_t enviar_mensaje(int sd, protocoloMTZ *mensaje);
 {
     int n;
     char *buffer;
-    uint32_t  lon= mensaje.header.lenght; //longitud total del mensaje
+    uint32_t  lon= sizeof(mensaje); //longitud total del mensaje
 
     mensaje.header.lenght = htons( sizeof(mensaje));
     //reservo el tamamo del buffer a enviar

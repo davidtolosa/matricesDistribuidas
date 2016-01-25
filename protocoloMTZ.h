@@ -49,4 +49,7 @@ int leerBytes(int sd, void *buffer, int len);
 
 */
 
-int leer_mensaje(int sd, char ** PS_mensaje)
+int leer_mensaje(int sd, char ** PS_mensaje);
+
+
+uint16_t enviar_mensaje(int sd, protocoloMTZ *mensaje);
