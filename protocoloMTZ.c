@@ -29,40 +29,50 @@ int leer_mensaje(int sd, protocoloMTZ ** mjs )
     int n;
     headerMTZ *head;
     bodyMTZ *body;
-    protocoloMTZ *mensaje;
+   
 
 
     char * buffer=NULL;
 
-    n = leerBytes (sd, &head , HEADER_LENGHT );
-    mjs.header.codigo = head.codigo;
-	mjs.header.lenght =ntohs( head.lenght);
+    n = leerBytes (sd, &mjs.head , HEADER_LENGHT );
+    mjs->header.codigo = msj->header.codigo;
+	mjs->header.lenght = ntohs( msj->header.lenght);
 
-/*
-    if (encabezado.longitud > 0){
-        buffer = (char *) malloc (sizeof(char)*(encabezado.longitud +1));
+
+    if (mjs->header.lenght > 0){
+        buffer = (char *) malloc (sizeof(char)*(mjs->header.lenght +1));
         if (buffer == NULL){
             perror ( "No se puede asignar memoria" );
             exit(EXIT_FAILURE);
         }
-        memset(buffer,0, encabezado.longitud+1);
+        memset(buffer,0, mjs->header.lenght+1);
 
         if (n != 0) {
-            n = leerBytes (PE_sd, buffer, encabezado.longitud);
+            n = leerBytes (sd, buffer, mjs->header.lenght);
+			return 1;
         }
     }
-*/
+
   fflush(stdout);
 
 
-    return (1);
+    return (0);
 }
 
 
-uint16_t enviar_mensaje(int sd, protocoloMTZ *mensaje);
+uint16_t enviar_mensaje(int sd, int codigo, char * mensajes);
 {
     int n;
     char *buffer;
+	
+	//creo el mensaje a enviar
+	protocoloMTZ mensaje;
+	
+	mensaje.header.codigo=codigo;
+	mensaje.body.mensage = mensajes;
+	mensaje.header.lenght = sizeof(mensaje);
+	
+	
     uint32_t  lon= sizeof(mensaje); //longitud total del mensaje
 
     mensaje.header.lenght = htons( sizeof(mensaje));
