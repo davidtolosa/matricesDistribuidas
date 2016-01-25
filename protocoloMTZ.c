@@ -27,14 +27,11 @@ int leerBytes(int sd, void *buffer, int len)
 int leer_mensaje(int sd, protocoloMTZ ** mjs )
 {
     int n;
-    headerMTZ *head;
-    bodyMTZ *body;
    
-
 
     char * buffer=NULL;
 
-    n = leerBytes (sd, &mjs.head , HEADER_LENGHT );
+    n = leerBytes (sd, &mjs->header , HEADER_LENGHT );
     mjs->header.codigo = msj->header.codigo;
 	mjs->header.lenght = ntohs( msj->header.lenght);
 
