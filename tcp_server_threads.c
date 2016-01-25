@@ -52,7 +52,7 @@ void *cliente ( void *arg ) {
 
 	int sdc;
 	int n;
-	protocoloMTZ *mjs;
+	protocoloMTZ mjs;
 
 	//suma = (struct psuma *) buffer;
 
@@ -64,10 +64,11 @@ void *cliente ( void *arg ) {
 	while ( n != 0) {
 
 		// aca debemos hacer la logica del cliente (cliente|worker)
-		n = leer_mensaje(sdc, mjs);
+		n = leer_mensaje(sdc, &mjs);
+		printf("leyo bytes: %i \n",n);
 		if( n > 0)
 		{
-			switch (mjs->header.codigo)
+			switch (mjs.header.codigo)
 			{
 				case SOLICITUD_CLIENTE:
 				{

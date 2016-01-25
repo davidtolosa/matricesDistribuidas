@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
 
 	if (strcmp(argv[2],"worker") == 0) {
 		printf("Conectado como Worker\n");
-		datos = malloc( strlen("Hola soy Worker"));
+		datos = malloc( sizeof(char) * strlen("Hola soy Worker"));
 		memset(datos,0, strlen("Hola soy Worker"));
     sprintf(datos,"%s","Hola soy Worker");
 
