@@ -32,28 +32,34 @@ int leer_mensaje(int sd, protocoloMTZ ** mjs )
     char * buffer=NULL;
 
     n = leerBytes (sd, &mjs->header , HEADER_LENGHT );
-    mjs->header.codigo = msj->header.codigo;
-	mjs->header.lenght = ntohs( msj->header.lenght);
+	
+	if(n !=0 )
+	{	
+		mjs->header.codigo = msj->header.codigo;
+		mjs->header.lenght = ntohs( msj->header.lenght);
 
 
-    if (mjs->header.lenght > 0){
-        buffer = (char *) malloc (sizeof(char)*(mjs->header.lenght +1));
-        if (buffer == NULL){
-            perror ( "No se puede asignar memoria" );
-            exit(EXIT_FAILURE);
-        }
-        memset(buffer,0, mjs->header.lenght+1);
+		if (mjs->header.lenght > 0){
+			buffer = (char *) malloc (sizeof(char)*(mjs->header.lenght +1));
+			if (buffer == NULL){
+				perror ( "No se puede asignar memoria" );
+				exit(EXIT_FAILURE);
+			}
+			memset(buffer,0, mjs->header.lenght+1);
 
-        if (n != 0) {
-            n = leerBytes (sd, buffer, mjs->header.lenght);
-			return 1;
-        }
-    }
-
-  fflush(stdout);
-
-
-    return (0);
+			if (n != 0) {
+				n = leerBytes (sd, buffer, mjs->header.lenght);
+				fflush(stdout);
+				return n;
+			}
+		}
+	}
+	else
+		{ 
+			fflush(stdout);
+			return (n);
+		}
+  
 }
 
 

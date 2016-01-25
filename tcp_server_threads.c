@@ -59,8 +59,7 @@ void *cliente ( void *arg ) {
 
 	int sdc;
 	int n;
-	char buffer[P_SIZE];
-	struct psuma *suma;
+	protocoloMTZ *msj;
 
 	suma = (struct psuma *) buffer;
 
@@ -72,6 +71,32 @@ void *cliente ( void *arg ) {
 	while ( n != 0) {
 
 		// aca debemos hacer la logica del cliente (cliente|worker)
+		n = leer_mensaje(sdc, mjs);
+		if( n > 0}
+		{
+			switch (mjs->header.codigo)
+			{
+				case SOLICITUD_CLIENTE:
+				{
+					//aca debemos poner toda la logica para cuando se conecta el cliente
+					
+					break;
+				}
+				case SOLICITUD_WORKER:
+				{
+					//aca debemos poner toda la logica para cuando se conecta el WORKER
+					break;
+				}
+			default:
+					break;
+			}
+			
+			
+		}
+		else
+		{
+			n = 0;
+		}
 
 		
 
