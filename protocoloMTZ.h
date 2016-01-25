@@ -18,7 +18,7 @@ En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
 
 
 //DECLARACION DE LA ESTRUCTURA DEL MENSAJE
-#define HEADER_LENGHT sizeof(headerMTZ);
+#define HEADER_LENGHT sizeof(headerMTZ)
 
 //.....................................................
 typedef struct header
@@ -49,7 +49,7 @@ int leerBytes(int sd, void *buffer, int len);
 
 */
 
-int leer_mensaje(int sd, protocoloMTZ ** mjs);
+int leer_mensaje(int sd, protocoloMTZ *mjs);
 
 
 uint16_t enviar_mensaje(int sd, int codigo, char * mensajes);

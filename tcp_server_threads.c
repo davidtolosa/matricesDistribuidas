@@ -52,7 +52,7 @@ void *cliente ( void *arg ) {
 
 	int sdc;
 	int n;
-	struct protocoloMTZ *msj;
+	protocoloMTZ *mjs;
 
 	//suma = (struct psuma *) buffer;
 
@@ -64,7 +64,7 @@ void *cliente ( void *arg ) {
 	while ( n != 0) {
 
 		// aca debemos hacer la logica del cliente (cliente|worker)
-		n = leer_mensaje(sdc, msj);
+		n = leer_mensaje(sdc, mjs);
 		if( n > 0)
 		{
 			switch (mjs->header.codigo)

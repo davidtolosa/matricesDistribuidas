@@ -19,12 +19,12 @@ int leerBytes(int sd, void *buffer, int len)
             return byte;
         }
 
-        leido += ret;
+        leido += byte;
     }
     return (leido);
 }
 
-int leer_mensaje(int sd, protocoloMTZ ** mjs )
+int leer_mensaje(int sd, protocoloMTZ *mjs )
 {
     int n;
    
@@ -35,8 +35,8 @@ int leer_mensaje(int sd, protocoloMTZ ** mjs )
 	
 	if(n !=0 )
 	{	
-		mjs->header.codigo = msj->header.codigo;
-		mjs->header.lenght = ntohs( msj->header.lenght);
+		//mjs->header.codigo = msj->header.codigo;
+		mjs->header.lenght = ntohs( mjs->header.lenght);
 
 
 		if (mjs->header.lenght > 0){
@@ -63,7 +63,7 @@ int leer_mensaje(int sd, protocoloMTZ ** mjs )
 }
 
 
-uint16_t enviar_mensaje(int sd, int codigo, char * mensajes);
+uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
 {
     int n;
     char *buffer;
