@@ -22,16 +22,21 @@ int leerBytes(int sd, void *buffer, int len)
     return (leido);
 }
 
-char leer_mensaje(int sd, char ** PS_mensaje)
+int leer_mensaje(int sd, protocoloMTZ ** mjs )
 {
     int n;
-    struct mensaje_struct encabezado;
+    headerMTZ *head;
+    bodyMTZ *body;
+    protocoloMTZ *mensaje;
+
+
     char * buffer=NULL;
 
-    n = leerBytes (sd, &encabezado, LEN_ENCABEZADO );
-    encabezado.codigo = encabezado.codigo;
-    encabezado.longitud = ntohs( encabezado.longitud );
+    n = leerBytes (sd, &head , HEADER_LENGHT );
+    mensaje.header.codigo = head.codigo;
+    mensaje.header.lenght =ntohs( head.lenght);
 
+/*
     if (encabezado.longitud > 0){
         buffer = (char *) malloc (sizeof(char)*(encabezado.longitud +1));
         if (buffer == NULL){
@@ -44,10 +49,34 @@ char leer_mensaje(int sd, char ** PS_mensaje)
             n = leerBytes (PE_sd, buffer, encabezado.longitud);
         }
     }
+*/
+  fflush(stdout);
 
-    if (debug) printf ("Se recibio:\n CODIGO: %c \n LONGITUD: %d \n DATOS: %s\n\n", encabezado.codigo, encabezado.longitud , buffer );
-    fflush(stdout);
-    *PS_mensaje=buffer;
 
-    return (encabezado.codigo);
+    return (1);
+}
+
+
+uint16_t enviar_mensaje(int sd, protocoloMTZ *mensaje);
+{
+    int n;
+    char *buffer;
+    uint32_t  lon= mensaje.header.lenght; //longitud total del mensaje
+
+    mensaje.header.lenght = htons( sizeof(mensaje));
+    //reservo el tamamo del buffer a enviar
+    buffer = (char *) malloc ((sizeof(char) * (lon+1) ));
+    if (buffer== NULL){
+        perror ( "No se puede asignar memoria: " );
+        exit(EXIT_FAILURE);
+    }
+    memset(buffer,0,(sizeof(char) * (lon+1)));
+    memcpy ( buffer , &mensaje.header , HEADER_LENGHT);	 // Guarda al inicio del buffer el código y longitud del mensaje
+    memcpy ( buffer + HEADER_LENGHT, &mensaje.body , lon ); // Por último guarda el mensaje
+
+    n = send (sd, buffer, lon  , 0);	// envia los datos!
+
+   free(buffer);
+
+    return (n);
 }

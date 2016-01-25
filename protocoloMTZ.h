@@ -49,4 +49,4 @@ int leerBytes(int sd, void *buffer, int len);
 
 */
 
-char leer_mensaje(int sd, char ** PS_mensaje)
+int leer_mensaje(int sd, char ** PS_mensaje)
