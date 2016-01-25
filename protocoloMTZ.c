@@ -35,7 +35,7 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 	
 	if(n !=0 )
 	{	
-		//mjs->header.codigo = msj->header.codigo;
+		mjs->header.codigo = mjs->header.codigo;
 		mjs->header.lenght = ntohs( mjs->header.lenght);
 
 
