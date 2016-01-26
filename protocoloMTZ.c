@@ -27,14 +27,20 @@ int leerBytes(int sd, void *buffer, int len)
 int leer_mensaje(int sd, protocoloMTZ *mjs )
 {
     int n;
-    char * buffer=NULL;
 
-    n = leerBytes (sd, &mjs->header, HEADER_LENGHT);
+    char * buffer=NULL;
+	headerMTZ head;
+	bodyMTZ body;
+
+    printf("Mensaje para leer \n");
+	n = leerBytes (sd, &head , HEADER_LENGHT );
+	printf("leyo bytes: %i \n",n);
 
 	if(n !=0 )
 	{
-		mjs->header.codigo = mjs->header.codigo;
-		mjs->header.lenght = ntohs( mjs->header.lenght);
+		mjs->header.codigo = head.codigo;
+		mjs->header.lenght = ntohs( head.lenght);
+
 
 		if (mjs->header.lenght > 0){
 			buffer = (char *) malloc (sizeof(char)*(mjs->header.lenght +1));
@@ -46,7 +52,10 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 
 			if (n != 0) {
 				n = leerBytes (sd, buffer, mjs->header.lenght);
-				fflush(stdout);
+
+        printf ("\nDatos Recividos:\n CODIGO: %d \n LONGITUD: %u \n DATOS: %s\n\n", mjs->header.codigo, mjs->header.lenght, buffer);
+
+        fflush(stdout);
 				return n;
 			}
 		}
@@ -58,7 +67,6 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 		}
 
 }
-
 
 uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
 {
@@ -88,6 +96,7 @@ uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
   memcpy ( buffer + HEADER_LENGHT, &mensaje.body , lon ); // Por último guarda el mensaje
 
   printf ("\nDatos a enviar:\n CODIGO: %d \n LONGITUD: %u \n DATOS: %s\n\n", mensaje.header.codigo, mensaje.header.lenght, mensaje.body.mensage);
+  fflush(stdout);
 
   n = send (sd, buffer, lon  , 0);	// envia los datos!
 
