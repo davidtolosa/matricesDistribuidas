@@ -39,7 +39,13 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 	if(n !=0 )
 	{
 		mjs->header.codigo = head.codigo;
-		mjs->header.lenght = ntohs( head.lenght);
+		mjs->header.lenght = head.lenght;
+		
+		printf("--------------------------------\n");
+		printf("Mensaje a Recibido HEADER: \n");
+		printf("Codigo : %i \n",mjs->header.codigo );
+		printf("Longitud : %i \n",mjs->header.lenght);
+		printf("--------------------------------\n");
 
 
 		if (mjs->header.lenght > 0){
@@ -54,8 +60,10 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 				n = leerBytes (sd, &body, mjs->header.lenght);
 				mjs->body.mensage = body.mensage;
 				
-				printf ("\nDatos Recividos:\n CODIGO: %d \n LONGITUD: %u \n DATOS: %s\n\n", mjs->header.codigo, mjs->header.lenght, mjs->body.mensage);
-
+				printf("Body : %s \n",mjs->body.mensage );
+			
+				printf("--------------------------------\n");
+				
 				fflush(stdout);
 				return n;
 			}
