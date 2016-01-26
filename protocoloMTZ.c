@@ -28,7 +28,7 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 {
     int n;
 
-    char * buffer=NULL;
+    /*char * buffer=NULL;*/
 	headerMTZ head;
 	bodyMTZ body;
 
@@ -43,19 +43,20 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 
 
 		if (mjs->header.lenght > 0){
-			buffer = (char *) malloc (sizeof(char)*(mjs->header.lenght +1));
-			if (buffer == NULL){
-				perror ( "No se puede asignar memoria" );
-				exit(EXIT_FAILURE);
-			}
-			memset(buffer,0, mjs->header.lenght+1);
+/*			buffer = (char *) malloc (sizeof(char)*(mjs->header.lenght +1));*/
+/*			if (buffer == NULL){*/
+/*				perror ( "No se puede asignar memoria" );*/
+/*				exit(EXIT_FAILURE);*/
+/*			}*/
+/*			memset(buffer,0, mjs->header.lenght+1);*/
 
 			if (n != 0) {
-				n = leerBytes (sd, buffer, mjs->header.lenght);
+				n = leerBytes (sd, &body, mjs->header.lenght);
+				mjs->body.mensage = body.mensage;
+				
+				printf ("\nDatos Recividos:\n CODIGO: %d \n LONGITUD: %u \n DATOS: %s\n\n", mjs->header.codigo, mjs->header.lenght, mjs->body.mensage);
 
-        printf ("\nDatos Recividos:\n CODIGO: %d \n LONGITUD: %u \n DATOS: %s\n\n", mjs->header.codigo, mjs->header.lenght, buffer);
-
-        fflush(stdout);
+				fflush(stdout);
 				return n;
 			}
 		}
@@ -70,19 +71,31 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 
 uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
 {
-  int n;
-  char *buffer;
-
+	int n;
+	char *buffer;
+	int size=0;
 	//creo el mensaje a enviar
 	protocoloMTZ mensaje;
 
 	mensaje.header.codigo=codigo;
 	mensaje.body.mensage = mensajes;
 	mensaje.header.lenght = sizeof(mensaje);
-
+	
   uint32_t  lon= sizeof(mensaje); //longitud total del mensaje
 
   mensaje.header.lenght = htons( sizeof(mensaje));
+  
+  
+  printf("--------------------------------\n");
+  printf("Mensaje a Enviar: \n");
+  printf("Codigo : %i \n",mensaje.header.codigo);
+  printf("Longitud : %i \n",mensaje.header.lenght);
+  printf("Body : %s \n",mensaje.body.mensage);
+  printf("lenght : %i \n",lon);
+  printf("--------------------------------\n");
+  
+  
+  
   //reservo el tamamo del buffer a enviar
   buffer = (char *) malloc ((sizeof(char) * (lon+1) ));
 
