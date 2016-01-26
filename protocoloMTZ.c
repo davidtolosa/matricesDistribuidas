@@ -34,7 +34,7 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 
     printf("Mensaje para leer \n");
 	n = leerBytes (sd, &head , HEADER_LENGHT );
-	printf("leyo bytes: %i \n",n);
+	printf("Leido header: %i \n",n);
 
 	if(n !=0 )
 	{
@@ -55,17 +55,23 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 /*				exit(EXIT_FAILURE);*/
 /*			}*/
 /*			memset(buffer,0, mjs->header.lenght+1);*/
-
+			printf("Hay mas por leer\n");
 			if (n != 0) {
-				n = leerBytes (sd, &body, mjs->header.lenght);
-				mjs->body.mensage = body.mensage;
 				
-				printf("Body : %s \n",mjs->body.mensage );
-			
-				printf("--------------------------------\n");
+					n = leerBytes (sd, &body, mjs->header.lenght - HEADER_LENGHT);
+					printf("Leido body : %i \n",n );
+					if (n != 0) {
+						mjs->body.mensage = body.mensage;
+						printf("Body : %s \n",mjs->body.mensage );
+						printf("--------------------------------\n");
 				
-				fflush(stdout);
-				return n;
+						fflush(stdout);
+						return n;
+						}
+					else {
+						fflush(stdout);
+						return n;
+					}
 			}
 		}
 	}
