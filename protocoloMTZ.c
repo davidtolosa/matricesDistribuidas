@@ -11,6 +11,8 @@ int leerBytes(int sd, void *buffer, int len)
 
     while ( ( leido < len) && ( byte != 0 ) ) {
         byte = recv(sd, buffer+leido, (len-leido) , 0);
+		
+		printf("Leido %i de %i\n Bytes %i\n", leido,len,byte);
         if (byte < 0) {
              perror("Error en recv");
              exit(EXIT_FAILURE);
@@ -55,10 +57,8 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 /*				exit(EXIT_FAILURE);*/
 /*			}*/
 /*			memset(buffer,0, mjs->header.lenght+1);*/
-			printf("Hay mas por leer\n");
-			if (n != 0) {
-				
-					n = leerBytes (sd, &body, mjs->header.lenght - HEADER_LENGHT);
+					printf("Hay mas por leer\n");
+					n = leerBytes (sd, &body, mjs->header.lenght - HEADER_LENGHT+1);
 					printf("Leido body : %i \n",n );
 					if (n != 0) {
 						mjs->body.mensage = body.mensage;
@@ -72,7 +72,7 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 						fflush(stdout);
 						return n;
 					}
-			}
+			
 		}
 	}
 	else
@@ -97,15 +97,15 @@ uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
 	
   uint32_t  lon= sizeof(mensaje); //longitud total del mensaje
 
-  mensaje.header.lenght = htons( sizeof(mensaje));
+ // mensaje.header.lenght = htons( sizeof(mensaje));
   
   
   printf("--------------------------------\n");
   printf("Mensaje a Enviar: \n");
   printf("Codigo : %i \n",mensaje.header.codigo);
-  printf("Longitud : %i \n",mensaje.header.lenght);
+  printf("Longitud : %i - %i \n",mensaje.header.lenght, lon);
   printf("Body : %s \n",mensaje.body.mensage);
-  printf("lenght : %i \n",lon);
+  printf("body lenght : %i \n",sizeof(mensaje.body));
   printf("--------------------------------\n");
   
   
@@ -121,8 +121,6 @@ uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
   memset(buffer,0,(sizeof(char) * (lon+1)));
   memcpy ( buffer , &mensaje.header , HEADER_LENGHT);	 // Guarda al inicio del buffer el código y longitud del mensaje
   memcpy ( buffer + HEADER_LENGHT, &mensaje.body , lon ); // Por último guarda el mensaje
-
-  printf ("\nDatos a enviar:\n CODIGO: %d \n LONGITUD: %u \n DATOS: %s\n\n", mensaje.header.codigo, mensaje.header.lenght, mensaje.body.mensage);
   fflush(stdout);
 
   n = send (sd, buffer, lon  , 0);	// envia los datos!
