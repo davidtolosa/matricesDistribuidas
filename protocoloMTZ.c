@@ -27,20 +27,14 @@ int leerBytes(int sd, void *buffer, int len)
 int leer_mensaje(int sd, protocoloMTZ *mjs )
 {
     int n;
-   
     char * buffer=NULL;
-	headerMTZ head;
-	bodyMTZ body;
-	
-    printf("Mensaje para leer \n");
-	n = leerBytes (sd, &head , HEADER_LENGHT );
-	printf("leyo bytes: %i \n",n);
-	
-	if(n !=0 )
-	{	
-		mjs->header.codigo = head.codigo;
-		mjs->header.lenght = ntohs( head.lenght);
 
+    n = leerBytes (sd, &mjs->header, HEADER_LENGHT);
+
+	if(n !=0 )
+	{
+		mjs->header.codigo = mjs->header.codigo;
+		mjs->header.lenght = ntohs( mjs->header.lenght);
 
 		if (mjs->header.lenght > 0){
 			buffer = (char *) malloc (sizeof(char)*(mjs->header.lenght +1));
@@ -58,7 +52,7 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 		}
 	}
 	else
-		{ 
+		{
 			fflush(stdout);
 			return (n);
 		}
@@ -68,33 +62,36 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 
 uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
 {
-    int n;
-    char *buffer;
-	
+  int n;
+  char *buffer;
+
 	//creo el mensaje a enviar
 	protocoloMTZ mensaje;
-	
+
 	mensaje.header.codigo=codigo;
 	mensaje.body.mensage = mensajes;
 	mensaje.header.lenght = sizeof(mensaje);
-	
-	
-    uint32_t  lon= sizeof(mensaje); //longitud total del mensaje
 
-    mensaje.header.lenght = htons( sizeof(mensaje));
-    //reservo el tamamo del buffer a enviar
-    buffer = (char *) malloc ((sizeof(char) * (lon+1) ));
-    if (buffer== NULL){
+  uint32_t  lon= sizeof(mensaje); //longitud total del mensaje
+
+  mensaje.header.lenght = htons( sizeof(mensaje));
+  //reservo el tamamo del buffer a enviar
+  buffer = (char *) malloc ((sizeof(char) * (lon+1) ));
+
+  if (buffer== NULL){
         perror ( "No se puede asignar memoria: " );
         exit(EXIT_FAILURE);
     }
-    memset(buffer,0,(sizeof(char) * (lon+1)));
-    memcpy ( buffer , &mensaje.header , HEADER_LENGHT);	 // Guarda al inicio del buffer el código y longitud del mensaje
-    memcpy ( buffer + HEADER_LENGHT, &mensaje.body , lon ); // Por último guarda el mensaje
 
-    n = send (sd, buffer, lon  , 0);	// envia los datos!
+  memset(buffer,0,(sizeof(char) * (lon+1)));
+  memcpy ( buffer , &mensaje.header , HEADER_LENGHT);	 // Guarda al inicio del buffer el código y longitud del mensaje
+  memcpy ( buffer + HEADER_LENGHT, &mensaje.body , lon ); // Por último guarda el mensaje
 
-   free(buffer);
+  printf ("\nDatos a enviar:\n CODIGO: %d \n LONGITUD: %u \n DATOS: %s\n\n", mensaje.header.codigo, mensaje.header.lenght, mensaje.body.mensage);
 
-    return (n);
+  n = send (sd, buffer, lon  , 0);	// envia los datos!
+
+  free(buffer);
+
+  return (n);
 }
