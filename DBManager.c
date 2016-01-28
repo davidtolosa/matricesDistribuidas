@@ -1,7 +1,7 @@
 /*
  FUNCIONES PARA LA UTILIZACION DE LA DB (SQLITE3).
 */
-#include "DBmanager.h"
+#include "DBManager.h"
 
 /*
 FUNCION

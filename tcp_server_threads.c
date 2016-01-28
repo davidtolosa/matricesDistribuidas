@@ -7,8 +7,10 @@
 #include <pthread.h>
 #include <signal.h>
 #include "protocoloMTZ.h"
+#include "DBManager.h"
 
-// COMPILAR: cc -o ser tcp_server_threads.c -l pthread
+// COMPILAR: gcc -o ./build/server tcp_server_threads.c protocoloMTZ.c DBManager.c -l pthread -l sqlite3
+	
 
 void *cliente (void *);
 
@@ -76,7 +78,13 @@ void *cliente ( void *arg ) {
 				{
 					printf("Cliente say: %s\n", mjs.body.mensage);
 					printf("--------------------------------\n");
-					//aca debemos poner toda la logica para cuando se conecta el cliente
+					//Cuando un cliente se conecta.
+					
+					sqlite3 *handler = ;
+					
+					
+					
+					
 
 					break;
 				}
