@@ -9,8 +9,9 @@
 #include "protocoloMTZ.h"
 #include <sqlite3.h>
 #include "DBManager.h"
+#include "funtionsServer.h"
 // COMPILAR: gcc -o ./build/server tcp_server_threads.c protocoloMTZ.c DBManager.c -l pthread -l sqlite3
-	
+
 
 void *cliente (void *);
 
@@ -78,13 +79,9 @@ void *cliente ( void *arg ) {
 				{
 					printf("Cliente say: %s\n", mjs.body.mensage);
 					printf("--------------------------------\n");
-					
-					//Cuando un cliente se conecta.
-					
-					
-					
-					
 
+					//Cuando un cliente se conecta.
+					newClient(sdc);
 					break;
 				}
 				case SOLICITUD_WORKER:
@@ -92,25 +89,9 @@ void *cliente ( void *arg ) {
 					printf("Cliente say: %s\n", mjs.body.mensage);
 					printf("--------------------------------\n");
 					printf("--------------------------------\n");
-					
-					sqlite3 *handler;
-					handler = db_openDB(SQLITE_OPEN_READWRITE);
-					char query[256];
-					
-					sprintf(query, "INSERT INTO cliente (id_cliente) VALUES (%i);",sdc);
-					
-					if( db_insert_update_delete(handler, query) != SQLITE_OK )
-					{
-						printf("Error al cargar el cliente\n");
-						
-						
-					}
-					else
-						{
-						printf("Cliente cargado\n");
-						}
-					db_closeDB(handler); // cierro la conexion
-					
+
+					//Cuando un Worker se conecta
+					newWorker(sdc);
 					break;
 				}
 			default:
@@ -123,10 +104,7 @@ void *cliente ( void *arg ) {
 		{
 			n = 0;
 		}
-
-
-
-	}
+}
 	printf("Cliente desconectado \n");
 	close (sdc);
 }
