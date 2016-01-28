@@ -95,18 +95,19 @@ void *cliente ( void *arg ) {
 					
 					sqlite3 *handler;
 					handler = db_openDB(SQLITE_OPEN_READWRITE);
-					char *query;
+					char query[256];
 					
 					sprintf(query, "INSERT INTO cliente (id_cliente) VALUES (%i);",sdc);
 					
-					if( db_insert_update_delete(handler, query) == SQLITE_OK )
+					if( db_insert_update_delete(handler, query) != SQLITE_OK )
 					{
-						printf("Cliente cargado");
+						printf("Error al cargar el cliente\n");
+						
 						
 					}
 					else
 						{
-							printf("Error al cargar el cliente");
+						printf("Cliente cargado\n");
 						}
 					db_closeDB(handler); // cierro la conexion
 					
