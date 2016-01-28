@@ -58,21 +58,24 @@ void *cliente ( void *arg ) {
 
 	sdc = *( (int *) arg);
 
+	printf("--------------------------------\n");
 	printf("Nuevo Cliente:%i \n",sdc);
+	
 
 	n = 1;
 	while ( n != 0) {
 
 		// aca debemos hacer la logica del cliente (cliente|worker)
 		n = leer_mensaje(sdc, &mjs);
-		printf("leyo bytes: %i \n",n);
+		
 		if( n > 0)
 		{
 			switch (mjs.header.codigo)
 			{
 				case SOLICITUD_CLIENTE:
 				{
-					printf("Solicitud de Cliente \n");
+					printf("Conectado como Cliente \n");
+					printf("--------------------------------\n");
 					//aca debemos poner toda la logica para cuando se conecta el cliente
 
 					break;
@@ -80,6 +83,7 @@ void *cliente ( void *arg ) {
 				case SOLICITUD_WORKER:
 				{
 					printf("Solicitud de Worker \n");
+					printf("--------------------------------\n");
 					//aca debemos poner toda la logica para cuando se conecta el WORKER
 					break;
 				}
