@@ -14,7 +14,7 @@ sqlite3 * db_openDB(int flag){
 
   sqlite3 *handle;
 
-  int retval = sqlite3_open_v2("DB-Server.db3",&handle,flag,0);
+  int retval = sqlite3_open_v2("dbMTZ.db3",&handle,flag,0);
 
 
   if(retval)
@@ -93,4 +93,29 @@ int db_insert_update_delete(sqlite3 *handle, char *query){
   }
 
   return retval;
+}
+
+/*
+FUNCION
+Descipcion : Inicializo la BD, elimino todos los datos de las tablas.
+Nombre : initBD()
+Recibe:
+Retorna:
+*/
+
+void initDB(){
+
+  sqlite3 *handle;
+  int retval;
+  char query[256]; //VERRRRRRRRRR
+
+  handle = db_openDB(SQLITE_OPEN_READWRITE);
+
+  	sqlite3_exec(handle, "BEGIN", 0, 0, 0);
+
+    sprintf(query, "DELETE FROM cliente;");
+
+    sqlite3_exec(handle, "END", 0, 0, 0);
+
+  db_closeDB(handle);
 }
