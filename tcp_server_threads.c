@@ -74,7 +74,7 @@ void *cliente ( void *arg ) {
 			{
 				case SOLICITUD_CLIENTE:
 				{
-					printf("Conectado como Cliente \n");
+					printf("Cliente say: %s\n", mjs.body.mensage);
 					printf("--------------------------------\n");
 					//aca debemos poner toda la logica para cuando se conecta el cliente
 
@@ -82,7 +82,7 @@ void *cliente ( void *arg ) {
 				}
 				case SOLICITUD_WORKER:
 				{
-					printf("Solicitud de Worker \n");
+					printf("Cliente say: %s\n", mjs.body.mensage);
 					printf("--------------------------------\n");
 					//aca debemos poner toda la logica para cuando se conecta el WORKER
 					break;

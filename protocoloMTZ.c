@@ -57,7 +57,7 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 /*				exit(EXIT_FAILURE);*/
 /*			}*/
 /*			memset(buffer,0, mjs->header.lenght+1);*/
-					buffer = (char *) malloc(mjs->header.lenght);
+					buffer = (char *) malloc(mjs->header.lenght - HEADER_LENGHT);
 					memset(buffer,0, mjs->header.lenght - HEADER_LENGHT);
 				
 					n = leerBytes (sd, buffer, mjs->header.lenght - HEADER_LENGHT);
@@ -67,6 +67,8 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 					if (n != 0) {
 						printf("Body %s: \n", buffer);
 						printf("--------------------------------\n\n");
+						mjs->body.mensage = (char *) malloc (sizeof(char)* strlen(buffer));
+						strcpy(mjs->body.mensage, buffer);
 						fflush(stdout);
 						return n;
 						}
