@@ -48,8 +48,11 @@ int main(int argc, char *argv[]) {
 
 	if (strcmp(argv[2],"worker") == 0) {
 		printf("Conectado como Worker\n");
+
 		char * buffer = "Hola soy Worker";
+
 		printf("Buffer : %s\n", buffer);
+
 		datos = malloc( sizeof(char) * strlen(buffer));
 		memset(datos,0, strlen(buffer));
     sprintf(datos,"%s",buffer);
@@ -60,7 +63,16 @@ int main(int argc, char *argv[]) {
 	else if(strcmp(argv[2],"cliente") == 0)
 	{
 		printf("Conectado como Cliente\n");
-		enviar_mensaje(sd,SOLICITUD_CLIENTE,"Cliente");
+
+		char * buffer = "Hola soy Cliente";
+
+		printf("Buffer : %s\n", buffer);
+
+		datos = malloc( sizeof(char) * strlen(buffer));
+		memset(datos,0, strlen(buffer));
+    sprintf(datos,"%s",buffer);
+
+		enviar_mensaje(sd,SOLICITUD_CLIENTE,datos);
 		//Enviar que es un cliente
 	}
 	else{

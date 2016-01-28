@@ -35,6 +35,8 @@ int main() {
 		exit (-1);
 		}
 
+	initDB(); //Inicio la DB
+
 	listen ( sd , 5);
 
 	while (1) {
@@ -56,6 +58,7 @@ void *cliente ( void *arg ) {
 	int sdc;
 	int n;
 	protocoloMTZ mjs;
+	int threadType;
 
 	//suma = (struct psuma *) buffer;
 
@@ -80,6 +83,8 @@ void *cliente ( void *arg ) {
 					printf("Cliente say: %s\n", mjs.body.mensage);
 					printf("--------------------------------\n");
 
+					threadType = SOLICITUD_CLIENTE;
+
 					//Cuando un cliente se conecta.
 					newClient(sdc);
 					break;
@@ -90,6 +95,7 @@ void *cliente ( void *arg ) {
 					printf("--------------------------------\n");
 					printf("--------------------------------\n");
 
+					threadType = SOLICITUD_WORKER;
 					//Cuando un Worker se conecta
 					newWorker(sdc);
 					break;
@@ -105,6 +111,23 @@ void *cliente ( void *arg ) {
 			n = 0;
 		}
 }
+
+//Cuando se desconecta elimino Cliente/worker
+	switch (threadType) {
+		case SOLICITUD_CLIENTE:
+		{
+			deleteClient(sdc);
+			break;
+		}
+		case SOLICITUD_WORKER:
+		{
+			deleteWorker(sdc);
+			break;
+		}
+		default:
+			break;
+	}
+
 	printf("Cliente desconectado \n");
 	close (sdc);
 }

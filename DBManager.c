@@ -117,8 +117,12 @@ void initDB(){
   	sqlite3_exec(handle, "BEGIN", 0, 0, 0);
 
     sprintf(query, "DELETE FROM cliente;");
+		retval = db_insert_update_delete(handle, query);
 
-    sqlite3_exec(handle, "END", 0, 0, 0);
+		sprintf(query, "DELETE FROM worker;");
+		retval = db_insert_update_delete(handle, query);
+
+		sqlite3_exec(handle, "END", 0, 0, 0);
 
   db_closeDB(handle);
 }
