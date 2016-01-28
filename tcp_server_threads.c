@@ -7,10 +7,15 @@
 #include <pthread.h>
 #include <signal.h>
 #include "protocoloMTZ.h"
+<<<<<<< HEAD
 #include "DBManager.h"
 
 // COMPILAR: gcc -o ./build/server tcp_server_threads.c protocoloMTZ.c DBManager.c -l pthread -l sqlite3
 	
+=======
+#include <sqlite3.h>
+#include "DBmanager.h"
+>>>>>>> d659bb617cb9f58d11469b6d22618f53df5e6dc5
 
 void *cliente (void *);
 
@@ -62,14 +67,14 @@ void *cliente ( void *arg ) {
 
 	printf("--------------------------------\n");
 	printf("Nuevo Cliente:%i \n",sdc);
-	
+
 
 	n = 1;
 	while ( n != 0) {
 
 		// aca debemos hacer la logica del cliente (cliente|worker)
 		n = leer_mensaje(sdc, &mjs);
-		
+
 		if( n > 0)
 		{
 			switch (mjs.header.codigo)
