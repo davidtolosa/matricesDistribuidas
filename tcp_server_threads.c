@@ -7,15 +7,10 @@
 #include <pthread.h>
 #include <signal.h>
 #include "protocoloMTZ.h"
-<<<<<<< HEAD
+#include <sqlite3.h>
 #include "DBManager.h"
-
 // COMPILAR: gcc -o ./build/server tcp_server_threads.c protocoloMTZ.c DBManager.c -l pthread -l sqlite3
 	
-=======
-#include <sqlite3.h>
-#include "DBmanager.h"
->>>>>>> d659bb617cb9f58d11469b6d22618f53df5e6dc5
 
 void *cliente (void *);
 
@@ -85,8 +80,22 @@ void *cliente ( void *arg ) {
 					printf("--------------------------------\n");
 					//Cuando un cliente se conecta.
 					
-					sqlite3 *handler = ;
+					sqlite3 *handler;
+					handler = db_openDB(SQLITE_OPEN_READWRITE);
+					char *query;
 					
+					sprintf(query, "INSERT INTO cliente (id_cliente) VALUES (%i);",sdc);
+					
+					if( db_insert_update_delete(handler, query) == SQLITE_OK )
+					{
+						printf("Cliente cargado");
+					
+					}
+					else
+					{
+						printf("Error al cargar el cliente");
+					}
+					db_closeDB(handler); // cierro la conexion
 					
 					
 					

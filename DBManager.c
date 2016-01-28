@@ -10,11 +10,13 @@ Nombre :  db_openDB
 Recibe: flag = SQLITE_OPEN_READONLY | SQLITE_OPEN_READWRITE
 Retorna: Puntero a la conexion que se creo.
 */
-sqlite3 * db_openDB(int flag){
+sqlite3* db_openDB(int flag){
 
-  sqlite3 *handle;
+  printf("Inicializanco DB");
 
-  int retval = sqlite3_open_v2("dbMTZ.db3",&handle,flag,0);
+	sqlite3 *handle;
+
+  int retval = sqlite3_open_v2("dbMTZ.sqlite3",&handle,flag,0);
 
 
   if(retval)
@@ -22,6 +24,8 @@ sqlite3 * db_openDB(int flag){
     printf("Error conexion '%s'.\n", sqlite3_errmsg(handle));
     db_closeDB(handle);
   }
+  else
+	  { printf("Open database");}
 
   return handle;
 }

@@ -2,7 +2,7 @@
 #include <sqlite3.h>
 
 
-sqlite3 * db_openDB(int flag);
+sqlite3* db_openDB(int flag);
 
 void db_closeDB (sqlite3 *handle);
 
