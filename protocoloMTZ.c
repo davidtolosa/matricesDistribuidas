@@ -33,8 +33,9 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
     /*char * buffer=NULL;*/
 	headerMTZ head;
 	bodyMTZ body;
+	char * buffer=NULL;
 
-    printf("Mensaje para leer \n");
+
 	n = leerBytes (sd, &head , HEADER_LENGHT );
 	printf("Leido header: %i \n",n);
 
@@ -44,7 +45,7 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 		mjs->header.lenght = head.lenght;
 		
 		printf("--------------------------------\n");
-		printf("Mensaje a Recibido HEADER: \n");
+		printf("Mensaje a Recibido HEADER: Size(%i)\n",HEADER_LENGHT);
 		printf("Codigo : %i \n",mjs->header.codigo );
 		printf("Longitud : %i \n",mjs->header.lenght);
 		printf("--------------------------------\n");
@@ -57,14 +58,16 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 /*				exit(EXIT_FAILURE);*/
 /*			}*/
 /*			memset(buffer,0, mjs->header.lenght+1);*/
-					printf("Hay mas por leer\n");
-					n = leerBytes (sd, &body, mjs->header.lenght - HEADER_LENGHT+1);
-					printf("Leido body : %i \n",n );
-					if (n != 0) {
-						mjs->body.mensage = body.mensage;
-						printf("Body : %s \n",mjs->body.mensage );
-						printf("--------------------------------\n");
+					printf("Hay mas por leer - Caracteres : %i\n", (mjs->header.lenght - HEADER_LENGHT) );
+					buffer = (char *) malloc(((mjs->header.lenght - HEADER_LENGHT)+1));
+					memset(buffer,0, mjs->header.lenght - HEADER_LENGHT);
 				
+					n = leerBytes (sd, buffer, mjs->header.lenght - HEADER_LENGHT);
+					
+				
+					
+					if (n != 0) {
+						printf("Body %s:  STRLEN(%i) \n", buffer, strlen(buffer));
 						fflush(stdout);
 						return n;
 						}
@@ -86,39 +89,41 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
 {
 	int n;
-	char *buffer;
+	char *buffer = NULL;
 	int size=0;
 	//creo el mensaje a enviar
 	protocoloMTZ mensaje;
 
 	mensaje.header.codigo=codigo;
 	mensaje.body.mensage = mensajes;
-	mensaje.header.lenght = sizeof(mensaje);
 	
-  uint32_t  lon= sizeof(mensaje); //longitud total del mensaje
-
+	
+  uint32_t  lon =  HEADER_LENGHT + (strlen(mensaje.body.mensage) + 1); //longitud total del mensaje
+  mensaje.header.lenght = lon;
  // mensaje.header.lenght = htons( sizeof(mensaje));
   
   
   printf("--------------------------------\n");
   printf("Mensaje a Enviar: \n");
   printf("Codigo : %i \n",mensaje.header.codigo);
-  printf("Longitud : %i - %i \n",mensaje.header.lenght, lon);
+  printf("Longitud : %i - %i - %u\n",mensaje.header.lenght, lon,htons( lon ));
   printf("Body : %s \n",mensaje.body.mensage);
-  printf("body lenght : %i \n",sizeof(mensaje.body));
+  printf("body lenght : %i - STRLEN(%i)\n",sizeof(mensaje.body),strlen(mensaje.body.mensage));
   printf("--------------------------------\n");
+  printf("Buffer : %i \n",lon);
+  
   
   
   
   //reservo el tamamo del buffer a enviar
-  buffer = (char *) malloc ((sizeof(char) * (lon+1) ));
+  buffer = (char *) malloc (lon);
 
   if (buffer== NULL){
         perror ( "No se puede asignar memoria: " );
         exit(EXIT_FAILURE);
     }
 
-  memset(buffer,0,(sizeof(char) * (lon+1)));
+  memset(buffer,0,lon);
   memcpy ( buffer , &mensaje.header , HEADER_LENGHT);	 // Guarda al inicio del buffer el código y longitud del mensaje
   memcpy ( buffer + HEADER_LENGHT, &mensaje.body , lon ); // Por último guarda el mensaje
   fflush(stdout);

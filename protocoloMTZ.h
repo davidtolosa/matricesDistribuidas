@@ -30,7 +30,7 @@ typedef struct header
 
 typedef struct body
 {
-  char *mensage;
+  char * mensage;
 } bodyMTZ;
 
 typedef struct protocolo

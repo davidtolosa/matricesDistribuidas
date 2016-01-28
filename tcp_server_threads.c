@@ -72,14 +72,14 @@ void *cliente ( void *arg ) {
 			{
 				case SOLICITUD_CLIENTE:
 				{
-					printf("Solicitud de Cliente");
+					printf("Solicitud de Cliente \n");
 					//aca debemos poner toda la logica para cuando se conecta el cliente
 
 					break;
 				}
 				case SOLICITUD_WORKER:
 				{
-					printf("Solicitud de Worker");
+					printf("Solicitud de Worker \n");
 					//aca debemos poner toda la logica para cuando se conecta el WORKER
 					break;
 				}
