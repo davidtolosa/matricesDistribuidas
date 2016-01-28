@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <sqlite3.h>
 
+//FUNCIONES PARA EL MANEJO DE LA BD
 
 sqlite3* db_openDB(int flag);
 

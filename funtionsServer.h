@@ -4,6 +4,9 @@
 #include <sqlite3.h>
 #include "DBManager.h"
 
+//DEFINICIONES DE LAS FUNCIONES EL SERVER
+//.....................................................
+
 int newClient(int sdc);
 int deleteClient(int sdc);
 int newWorker(int sdc);

@@ -1,5 +1,14 @@
 #include "funtionsServer.h"
 
+/*
+FUNCION
+Descipcion : 
+Nombre :  
+Recibe:  
+Retorna: 
+*/
+
+
 int newClient(int sdc){
   sqlite3 *handler;
   handler = db_openDB(SQLITE_OPEN_READWRITE);
@@ -20,6 +29,15 @@ int newClient(int sdc){
     return 1;
     }
 }
+
+/*
+FUNCION
+Descipcion : 
+Nombre :  
+Recibe:  
+Retorna: 
+*/
+
 
 int deleteClient(int sdc){
   sqlite3 *handler;
@@ -42,6 +60,15 @@ int deleteClient(int sdc){
     }
 }
 
+/*
+FUNCION
+Descipcion : 
+Nombre :  
+Recibe:  
+Retorna: 
+*/
+
+
 int newWorker(int sdc){
   sqlite3 *handler;
   handler = db_openDB(SQLITE_OPEN_READWRITE);
@@ -62,6 +89,15 @@ int newWorker(int sdc){
     return 1;
     }
 }
+
+/*
+FUNCION
+Descipcion : 
+Nombre :  
+Recibe:  
+Retorna: 
+*/
+
 
 int deleteWorker(int sdc){
   sqlite3 *handler;
