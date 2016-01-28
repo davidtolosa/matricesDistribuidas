@@ -78,24 +78,9 @@ void *cliente ( void *arg ) {
 				{
 					printf("Cliente say: %s\n", mjs.body.mensage);
 					printf("--------------------------------\n");
+					
 					//Cuando un cliente se conecta.
 					
-					sqlite3 *handler;
-					handler = db_openDB(SQLITE_OPEN_READWRITE);
-					char *query;
-					
-					sprintf(query, "INSERT INTO cliente (id_cliente) VALUES (%i);",sdc);
-					
-					if( db_insert_update_delete(handler, query) == SQLITE_OK )
-					{
-						printf("Cliente cargado");
-					
-					}
-					else
-					{
-						printf("Error al cargar el cliente");
-					}
-					db_closeDB(handler); // cierro la conexion
 					
 					
 					
@@ -106,7 +91,25 @@ void *cliente ( void *arg ) {
 				{
 					printf("Cliente say: %s\n", mjs.body.mensage);
 					printf("--------------------------------\n");
-					//aca debemos poner toda la logica para cuando se conecta el WORKER
+					printf("--------------------------------\n");
+					
+					sqlite3 *handler;
+					handler = db_openDB(SQLITE_OPEN_READWRITE);
+					char *query;
+					
+					sprintf(query, "INSERT INTO cliente (id_cliente) VALUES (%i);",sdc);
+					
+					if( db_insert_update_delete(handler, query) == SQLITE_OK )
+					{
+						printf("Cliente cargado");
+						
+					}
+					else
+						{
+							printf("Error al cargar el cliente");
+						}
+					db_closeDB(handler); // cierro la conexion
+					
 					break;
 				}
 			default:
