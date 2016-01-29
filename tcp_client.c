@@ -35,18 +35,19 @@ int main(int argc, char *argv[]) {
 	//servidor.sin_addr.s_addr = inet_addr("x.x.x.x");
 
 	if ( h = gethostbyname ( argv [1] ) ) {
-		memcpy ( &servidor.sin_addr , h->h_addr , h->h_length );
+		memcpy(&servidor.sin_addr, h->h_addr, h->h_length);
 	}
 
 	lon = sizeof(servidor);
 
-	if ( connect ( sd , (struct sockaddr *) &servidor, lon ) < 0 ) {
+	if (connect (sd, (struct sockaddr *) &servidor, lon) < 0) {
+
 		perror ("Error en connect");
 		exit(-1);
 	}
 
-
 	if (strcmp(argv[2],"worker") == 0) {
+
 		printf("Conectado como Worker\n");
 
 		char * buffer = "Hola soy Worker";
@@ -60,8 +61,8 @@ int main(int argc, char *argv[]) {
 		enviar_mensaje(sd,SOLICITUD_WORKER,datos);
 		//Enviar que es un worker
 	}
-	else if(strcmp(argv[2],"cliente") == 0)
-	{
+	else if(strcmp(argv[2],"cliente") == 0){
+
 		printf("Conectado como Cliente\n");
 
 		char * buffer = "Hola soy Cliente";
@@ -76,7 +77,9 @@ int main(int argc, char *argv[]) {
 		//Enviar que es un cliente
 	}
 	else{
+
 		printf("Error en el arg[2]\n");
+
 	}
 
 	while (1) {

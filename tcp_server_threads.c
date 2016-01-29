@@ -67,14 +67,12 @@ void *cliente ( void *arg ) {
 	printf("--------------------------------\n");
 	printf("Nuevo Cliente:%i \n",sdc);
 
-
 	n = 1;
 	while ( n != 0) {
 
-		// aca debemos hacer la logica del cliente (cliente|worker)
-		n = leer_mensaje(sdc, &mjs);
+	n = leer_mensaje(sdc, &mjs);
 
-		if( n > 0)
+	if( n > 0)
 		{
 			switch (mjs.header.codigo)
 			{
@@ -96,6 +94,7 @@ void *cliente ( void *arg ) {
 					printf("--------------------------------\n");
 
 					threadType = SOLICITUD_WORKER;
+
 					//Cuando un Worker se conecta
 					newWorker(sdc);
 					break;
@@ -103,8 +102,6 @@ void *cliente ( void *arg ) {
 			default:
 					break;
 			}
-
-
 		}
 		else
 		{
@@ -117,17 +114,18 @@ void *cliente ( void *arg ) {
 		case SOLICITUD_CLIENTE:
 		{
 			deleteClient(sdc);
+			printf("---Cliente desconectado---\n");
 			break;
 		}
 		case SOLICITUD_WORKER:
 		{
 			deleteWorker(sdc);
+			printf("---Worker desconectado---\n", );
 			break;
 		}
 		default:
 			break;
 	}
 
-	printf("Cliente desconectado \n");
-	close (sdc);
+close (sdc);
 }

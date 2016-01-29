@@ -2,12 +2,11 @@
 
 /*
 FUNCION
-Descipcion : 
-Nombre :  
-Recibe:  
-Retorna: 
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
 */
-
 
 int newClient(int sdc){
   sqlite3 *handler;
@@ -32,10 +31,10 @@ int newClient(int sdc){
 
 /*
 FUNCION
-Descipcion : 
-Nombre :  
-Recibe:  
-Retorna: 
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
 */
 
 
@@ -62,10 +61,10 @@ int deleteClient(int sdc){
 
 /*
 FUNCION
-Descipcion : 
-Nombre :  
-Recibe:  
-Retorna: 
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
 */
 
 
@@ -92,12 +91,11 @@ int newWorker(int sdc){
 
 /*
 FUNCION
-Descipcion : 
-Nombre :  
-Recibe:  
-Retorna: 
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
 */
-
 
 int deleteWorker(int sdc){
   sqlite3 *handler;
