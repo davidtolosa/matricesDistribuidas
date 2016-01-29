@@ -47,16 +47,6 @@ int main(int argc, char *argv[]) {
 
 	if (strcmp(argv[2],"worker") == 0) {
 
-/*		printf("Conectado como Worker\n");*/
-
-/*		char * buffer = "Hola soy Worker";*/
-
-/*		printf("Buffer : %s\n", buffer);*/
-
-/*		datos = malloc( sizeof(char) * strlen(buffer));*/
-/*		memset(datos,0, strlen(buffer));*/
-/*    sprintf(datos,"%s",buffer);*/
-
 		enviar_mensaje(sd,SOLICITUD_WORKER,"Hola, soy Worker.");
 		//Enviar que es un worker
 	}
@@ -86,7 +76,8 @@ int main(int argc, char *argv[]) {
 			case ACK_CLIENTE_REGISTER:
 				{
 					printf("Server say: %s\n", mjs.body.mensage);
-					printf("--------------------------------\n");	
+					printf("--------------------------------\n");
+					
 				
 					break;
 				}

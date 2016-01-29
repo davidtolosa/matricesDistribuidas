@@ -58,7 +58,7 @@ void *cliente ( void *arg ) {
 	int sdc;
 	int n;
 	protocoloMTZ mjs;
-	int threadType;
+	int threadType=0;
 
 	//suma = (struct psuma *) buffer;
 
@@ -85,21 +85,19 @@ void *cliente ( void *arg ) {
 
 					//Cuando un cliente se conecta.
 					newClient(sdc);
-					enviar_mensaje(sdc, ACK_CLIENTE_REGISTER, "Hola Cliente. Espero sus actividades");
+					enviar_mensaje(sdc, ACK_CLIENTE_REGISTER, "Hola Cliente. Espero sus actividades\n");
 					break;
 				}
 				case SOLICITUD_WORKER:
 				{
 					printf("Cliente say: %s\n", mjs.body.mensage);
 					printf("--------------------------------\n");
-					printf("--------------------------------\n");
-
 					threadType = SOLICITUD_WORKER;
 
 					//Cuando un Worker se conecta
 					newWorker(sdc);
 					
-					/*enviar_mensaje(sdc, ACK_WORKER_REGISTER, "Hola Worker, pronto lo pondre a trabajar");*/
+					enviar_mensaje(sdc, ACK_WORKER_REGISTER, "Hola Worker\n");
 					
 					break;
 				}
