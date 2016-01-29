@@ -85,6 +85,7 @@ void *cliente ( void *arg ) {
 
 					//Cuando un cliente se conecta.
 					newClient(sdc);
+					enviar_mensaje(sdc, ACK_CLIENTE_REGISTER, "Hola Cliente. Espero sus actividades.");
 					break;
 				}
 				case SOLICITUD_WORKER:
@@ -97,6 +98,8 @@ void *cliente ( void *arg ) {
 
 					//Cuando un Worker se conecta
 					newWorker(sdc);
+					enviar_mensaje(sdc, ACK_WORKER_REGISTER, "Hola Worker, pronto lo pondre a trabajar.");
+					
 					break;
 				}
 			default:
@@ -120,7 +123,7 @@ void *cliente ( void *arg ) {
 		case SOLICITUD_WORKER:
 		{
 			deleteWorker(sdc);
-			printf("---Worker desconectado---\n", );
+			printf("---Worker desconectado---\n");
 			break;
 		}
 		default:

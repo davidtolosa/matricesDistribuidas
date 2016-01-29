@@ -83,8 +83,41 @@ int main(int argc, char *argv[]) {
 	}
 
 	while (1) {
-		/* code */
+		
+		protocoloMTZ mjs;
+		n = leer_mensaje(sd, &mjs);
+		
+		if( n > 0)
+		{
+			switch (mjs.header.codigo)
+			{
+			case ACK_CLIENTE_REGISTER:
+				{
+					printf("Server say: %s\n", mjs.body.mensage);
+					printf("--------------------------------\n");	
+				
+					break;
+				}
+			case ACK_WORKER_REGISTER:
+				{
+					printf("Server say: %s\n", mjs.body.mensage);
+					printf("--------------------------------\n");
+					
+					break;
+				}
+			default:
+				break;
+			}
+		}
+		else
+			{
+				n = 0;
+			}
+		
+		
+		
 	}
-
+	printf("El servidor dejo de prestar servicio\n");
+	
 	close(sd);
 }

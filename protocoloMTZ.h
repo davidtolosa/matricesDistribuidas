@@ -10,7 +10,8 @@ En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
 //CODIGOS DE LOS MENSAJES
 //....................................................
 //Codigo del tipo 40X - CONFIRMACION ACK
-#define ACK 401
+#define ACK_CLIENTE_REGISTER 401
+#define ACK_WORKER_REGISTER 402
 //....................................................
 //codigos del tipo 10X - SOLICITUDES DE CONEXION.
 #define SOLICITUD_CLIENTE 101
