@@ -48,32 +48,22 @@ int main(int argc, char *argv[]) {
 
 	if (strcmp(argv[2],"worker") == 0) {
 
-		printf("Conectado como Worker\n");
+/*		printf("Conectado como Worker\n");*/
 
-		char * buffer = "Hola soy Worker";
+/*		char * buffer = "Hola soy Worker";*/
 
-		printf("Buffer : %s\n", buffer);
+/*		printf("Buffer : %s\n", buffer);*/
 
-		datos = malloc( sizeof(char) * strlen(buffer));
-		memset(datos,0, strlen(buffer));
-    sprintf(datos,"%s",buffer);
+/*		datos = malloc( sizeof(char) * strlen(buffer));*/
+/*		memset(datos,0, strlen(buffer));*/
+/*    sprintf(datos,"%s",buffer);*/
 
-		enviar_mensaje(sd,SOLICITUD_WORKER,datos);
+		enviar_mensaje(sd,SOLICITUD_WORKER,"Hola, soy Worker.");
 		//Enviar que es un worker
 	}
 	else if(strcmp(argv[2],"cliente") == 0){
 
-		printf("Conectado como Cliente\n");
-
-		char * buffer = "Hola soy Cliente";
-
-		printf("Buffer : %s\n", buffer);
-
-		datos = malloc( sizeof(char) * strlen(buffer));
-		memset(datos,0, strlen(buffer));
-    sprintf(datos,"%s",buffer);
-
-		enviar_mensaje(sd,SOLICITUD_CLIENTE,datos);
+		enviar_mensaje(sd,SOLICITUD_CLIENTE,"Hola, soy Cliente.");
 		//Enviar que es un cliente
 	}
 	else{
@@ -82,7 +72,7 @@ int main(int argc, char *argv[]) {
 
 	}
 
-	while (1) {
+	while (n!=0) {
 		
 		protocoloMTZ mjs;
 		n = leer_mensaje(sd, &mjs);

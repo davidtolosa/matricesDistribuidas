@@ -81,11 +81,18 @@ uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
 {
 	int n;
 	char *buffer = NULL;
+	char *datos = NULL;
 	int size=0;
 	protocoloMTZ mensaje; //creo el mensaje a enviar
 
   mensaje.header.codigo=codigo;
-	mensaje.body.mensage = mensajes;
+  
+  //preparo los datos para poder ser enviados y armo el paquete.
+  datos = malloc( sizeof(char) * strlen(mensajes));
+  memset(datos,0, strlen(mensajes));
+  sprintf(datos,"%s",mensajes);
+  //---------------------------------------------
+  mensaje.body.mensage = datos;
 
   uint32_t  lon =  HEADER_LENGHT + (sizeof(char)*((strlen(mensaje.body.mensage) + 1))); //longitud total del mensaje
   mensaje.header.lenght = lon;
@@ -110,7 +117,8 @@ uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
   fflush(stdout);
 
   n = send (sd, buffer, lon  , 0);	// envia los datos!
-
+  printf("Datos enviados : %i\n", n);
+  
   free(buffer);
 
   return (n);
