@@ -116,7 +116,7 @@ uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
   buffer = (char *) malloc (lon);
 
   if (buffer== NULL){
-        perror ( "No se puede asignar memoria: " );
+        perror ("No se puede asignar memoria: " );
         exit(EXIT_FAILURE);
     }
 

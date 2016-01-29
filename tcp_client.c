@@ -48,12 +48,12 @@ int main(int argc, char *argv[]) {
 
 	if (strcmp(argv[2],"worker") == 0) {
 
-		enviar_mensaje(sd,SOLICITUD_WORKER,"Hola, soy Worker.");
+		enviar_mensaje(sd,SOLICITUD_WORKER,"Hola, soy Worker.\n");
 		//Enviar que es un worker
 	}
 	else if(strcmp(argv[2],"cliente") == 0){
 
-		enviar_mensaje(sd,SOLICITUD_CLIENTE,"Hola, soy Cliente.");
+		enviar_mensaje(sd,SOLICITUD_CLIENTE,"Hola, soy Cliente.\n");
 		//Enviar que es un cliente
 	}
 	else{
