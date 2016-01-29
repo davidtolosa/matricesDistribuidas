@@ -6,6 +6,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include "functionsClient.h"
 #include "protocoloMTZ.h"
 
 //#define P_SIZE sizeof(struct psuma)
@@ -61,31 +62,36 @@ int main(int argc, char *argv[]) {
 
 	}
 
-	
+
 	protocoloMTZ mjs;
-	
+
 	while (n!=0) {
-		
-	
+
+
 		n = leer_mensaje(sd, &mjs);
-		
+
 		if( n > 0)
 		{
 			switch (mjs.header.codigo)
 			{
 			case ACK_CLIENTE_REGISTER:
 				{
-					printf("Server say: %s\n", mjs.body.mensage);
+					/*printf("Server say: %s\n", mjs.body.mensage);
 					printf("--------------------------------\n");
-					
-				
+					*/
+					showHelpClient();
+
+					fgets(teclado, sizeof(teclado), stdin);
+					teclado[strlen(teclado) - 1] = '\0';
+
+					printf("%s\n",teclado);
 					break;
 				}
 			case ACK_WORKER_REGISTER:
 				{
 					printf("Server say: %s\n", mjs.body.mensage);
 					printf("--------------------------------\n");
-					
+
 					break;
 				}
 			default:
@@ -96,11 +102,11 @@ int main(int argc, char *argv[]) {
 			{
 				n = 0;
 			}
-		
-		
-		
+
+
+
 	}
 	printf("El servidor dejo de prestar servicio\n");
-	
+
 	close(sd);
 }

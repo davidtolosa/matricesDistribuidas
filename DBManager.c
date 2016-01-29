@@ -15,7 +15,7 @@ sqlite3* db_openDB(int flag){
 
 
 	sqlite3 *handle;
-	int retval = sqlite3_open_v2("dbMTZ.sqlite3",&handle,flag,0);
+	int retval = sqlite3_open_v2("../dbMTZ.sqlite3",&handle,flag,0);
 
 
 	if(retval!=SQLITE_OK)

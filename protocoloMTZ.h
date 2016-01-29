@@ -22,6 +22,8 @@ En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
 #define HEADER_LENGHT sizeof(headerMTZ)
 
 //.....................................................
+
+
 typedef struct header
 {
   int codigo;

@@ -33,17 +33,22 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 	char * buffer=NULL;
 
   n = leerBytes (sd, &head , HEADER_LENGHT );
+
+  #ifdef DEBUG
 	printf("Leido header: %i \n",n);
+  #endif
 
   if(n !=0 )
 	{
 		mjs->header.codigo = head.codigo;
 		mjs->header.lenght = head.lenght;
 
-		printf("--------------------------------\n");
+    #ifdef DEBUG
+    printf("--------------------------------\n");
 		printf("Mensaje a Recibido HEADER: Size(%i)\n",HEADER_LENGHT);
 		printf("Codigo : %i \n",mjs->header.codigo );
 		printf("Longitud : %i \n",mjs->header.lenght);
+    #endif
 
     if (mjs->header.lenght > 0){
 /*			buffer = (char *) malloc (sizeof(char)*(mjs->header.lenght +1));*/
@@ -58,8 +63,10 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 					n = leerBytes (sd, buffer, mjs->header.lenght - HEADER_LENGHT);
 
           if (n != 0) {
-						printf("Body %s: \n", buffer);
+            #ifdef DEBUG
+            printf("Body %s: \n", buffer);
 						printf("--------------------------------\n\n");
+            #endif
 						mjs->body.mensage = (char *) malloc (sizeof(char)* strlen(buffer));
 						strcpy(mjs->body.mensage, buffer);
 						fflush(stdout);
@@ -86,7 +93,7 @@ uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
 	protocoloMTZ mensaje; //creo el mensaje a enviar
 
   mensaje.header.codigo=codigo;
-  
+
   //preparo los datos para poder ser enviados y armo el paquete.
   datos = malloc( sizeof(char) * strlen(mensajes));
   memset(datos,0, strlen(mensajes));
@@ -97,12 +104,14 @@ uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
   uint32_t  lon =  HEADER_LENGHT + (sizeof(char)*((strlen(mensaje.body.mensage) + 1))); //longitud total del mensaje
   mensaje.header.lenght = lon;
  // mensaje.header.lenght = htons( sizeof(mensaje));
+  #ifdef DEBUG
   printf("--------------------------------\n");
   printf("Mensaje a Enviar: \n");
   printf("Codigo : %i \n",mensaje.header.codigo);
   printf("Longitud : %i - %i - %u\n",mensaje.header.lenght, lon,htons( lon ));
   printf("Body : %s \n",mensaje.body.mensage);
   printf("--------------------------------\n");
+  #endif
 
   buffer = (char *) malloc (lon);
 
@@ -117,8 +126,11 @@ uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
   fflush(stdout);
 
   n = send (sd, buffer, lon  , 0);	// envia los datos!
+
+  #ifdef DEBUG
   printf("Datos enviados : %i\n", n);
-  
+  #endif
+
   free(buffer);
 
   return (n);
