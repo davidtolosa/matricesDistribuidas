@@ -11,7 +11,7 @@
 //#define P_SIZE sizeof(struct psuma)
 
 int main(int argc, char *argv[]) {
-	int n;
+	int n = 1;
 	int sd;
 	int lon;
 	char teclado[512];
@@ -19,7 +19,6 @@ int main(int argc, char *argv[]) {
 	struct sockaddr_in servidor;
 	struct sockaddr_in cliente;
 	struct hostent *h;
-	struct protocoloMTZ *msj;
 	char *datos = NULL;
 
 	if (argc < 3) {
@@ -72,9 +71,12 @@ int main(int argc, char *argv[]) {
 
 	}
 
+	
+	protocoloMTZ mjs;
+	
 	while (n!=0) {
 		
-		protocoloMTZ mjs;
+	
 		n = leer_mensaje(sd, &mjs);
 		
 		if( n > 0)

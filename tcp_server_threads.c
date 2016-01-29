@@ -99,7 +99,7 @@ void *cliente ( void *arg ) {
 					//Cuando un Worker se conecta
 					newWorker(sdc);
 					
-					enviar_mensaje(sdc, ACK_WORKER_REGISTER, "Hola Worker, pronto lo pondre a trabajar");
+					/*enviar_mensaje(sdc, ACK_WORKER_REGISTER, "Hola Worker, pronto lo pondre a trabajar");*/
 					
 					break;
 				}
