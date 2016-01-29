@@ -6,12 +6,29 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <signal.h>
 #include "functionsClient.h"
 #include "protocoloMTZ.h"
 
-//#define P_SIZE sizeof(struct psuma)
+int signalClose;
+
+void slot_closeMTZ ( int signal)
+{
+	printf("Se ha precionado Ctrl-c \n");
+	signalClose=1;
+	
+	exit(signal);
+	
+}
+
+
 
 int main(int argc, char *argv[]) {
+	
+	//Signal para cerrar la app
+	signal(SIGINT, slot_closeMTZ);
+	signalClose=0;
+	
 	int n = 1;
 	int sd;
 	int lon;
@@ -65,7 +82,7 @@ int main(int argc, char *argv[]) {
 
 	protocoloMTZ mjs;
 
-	while (n!=0) {
+	while ((n!=0) || (signalClose!=1)) {
 
 
 		n = leer_mensaje(sd, &mjs);
@@ -79,10 +96,11 @@ int main(int argc, char *argv[]) {
 					/*printf("Server say: %s\n", mjs.body.mensage);
 					printf("--------------------------------\n");
 					*/
-					showHelpClient();
+					//showHelpClient();
 
 					fgets(teclado, sizeof(teclado), stdin);
 					teclado[strlen(teclado) - 1] = '\0';
+					fflush(stdin);
 
 					printf("%s\n",teclado);
 					break;

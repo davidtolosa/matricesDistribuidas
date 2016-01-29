@@ -39,24 +39,32 @@ Retorna:
 
 
 int deleteClient(int sdc){
-  sqlite3 *handler;
+  
+  sqlite3 *handler =NULL;
+  printf("Abro la base de datos\n");
   handler = db_openDB(SQLITE_OPEN_READWRITE);
   char query[256];
 
   sprintf(query, "DELETE FROM cliente WHERE id_cliente=%i;",sdc);
-
-  if( db_insert_update_delete(handler, query) != SQLITE_OK )
-  {
-    printf("Error al eliminar el cliente\n");
-    db_closeDB(handler); // cierro la conexion
-    return 0;
-    }
-  else
-    {
-    printf("Cliente eliminado\n");
-    db_closeDB(handler); // cierro la conexion
-    return 1;
-    }
+	if(handler !=NULL)
+	{	
+	  if( db_insert_update_delete(handler, query) != SQLITE_OK )
+	  {
+		printf("Error al eliminar el cliente\n");
+		db_closeDB(handler); // cierro la conexion
+		return 0;
+		}
+	  else
+		{
+		printf("Cliente eliminado\n");
+		db_closeDB(handler); // cierro la conexion
+		return 1;
+		}
+	}
+	else 
+	{
+		return 0;
+	}
 }
 
 /*

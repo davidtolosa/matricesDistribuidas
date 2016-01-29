@@ -10,12 +10,27 @@
 #include <sqlite3.h>
 #include "DBManager.h"
 #include "funtionsServer.h"
+#include <signal.h>
 // COMPILAR: gcc -o ./build/server tcp_server_threads.c protocoloMTZ.c DBManager.c -l pthread -l sqlite3
 
+int signalClose;
+
+void slot_closeMTZ ( int signal)
+{
+	printf("Se ha precionado Ctrl-c \n");
+	signalClose=1;
+	
+	exit(signal);
+	
+}
 
 void *cliente (void *);
 
 int main() {
+	
+	//Signal para cerrar la app
+	signal(SIGINT, slot_closeMTZ);
+	signalClose=0;
 
 	int lon;
 	int sd;
@@ -39,7 +54,7 @@ int main() {
 
 	listen ( sd , 5);
 
-	while (1) {
+	while (signalClose!=1) {
 
 		lon = sizeof(sock_cliente);
 
@@ -112,11 +127,16 @@ void *cliente ( void *arg ) {
 }
 
 //Cuando se desconecta elimino Cliente/worker
+	
+	printf("Me despido\n");
 	switch (threadType) {
 		case SOLICITUD_CLIENTE:
 		{
-			deleteClient(sdc);
-			printf("---Cliente desconectado---\n");
+			
+			if(deleteClient(sdc) ==1)
+				printf("---Cliente desconectado---\n");
+			else
+				printf("ERROR BD\n");	
 			break;
 		}
 		case SOLICITUD_WORKER:

@@ -82,6 +82,7 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 			fflush(stdout);
 			return (n);
 		}
+  fflush(stdout);
 }
 
 uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
