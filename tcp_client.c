@@ -115,6 +115,12 @@ int main(int argc, char *argv[]) {
 										char *file2 = strtok (NULL," ");
 										printf( "FILE 1 : %s\n", file1 );
 										printf( "FILE 2 : %s\n", file2 );
+										
+										printf( "M1 :\n");
+										obtainMTZ(file1);
+										printf( "M2 :\n");
+										obtainMTZ(file2);
+										
 								}
 							else 
 								{
