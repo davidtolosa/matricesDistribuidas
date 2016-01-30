@@ -123,7 +123,7 @@ uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
 
   memset(buffer,0,lon);
   memcpy ( buffer , &mensaje.header , HEADER_LENGHT);	 // Guarda al inicio del buffer el código y longitud del mensaje
-  memcpy ( buffer + HEADER_LENGHT, mensaje.body.mensage , lon - HEADER_LENGHT ); // Por último guarda el mensaje
+  memcpy ( buffer + HEADER_LENGHT, mensaje.body.mensage , lon - HEADER_LENGHT-1 ); // Por último guarda el mensaje
  
   fflush(stdout);
 
