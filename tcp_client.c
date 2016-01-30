@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 	int n = 1;
 	int sd;
 	int lon;
-	char teclado[512];
+	char teclado[256];
 	//char buffer[P_SIZE];
 	struct sockaddr_in servidor;
 	struct sockaddr_in cliente;
@@ -95,40 +95,55 @@ int main(int argc, char *argv[]) {
 					{
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-						
+					
+						showHelpClient();
 						while(n!=0)
 						{
-							showHelpClient();
-
+							
+							
+							printf( "$ >");
 							fgets(teclado, sizeof(teclado), stdin);
 							teclado[strlen(teclado) - 1] = '\0';
 							fflush(stdin);
 							
-							char** token;
-							token = str_split(&teclado, ' ');
-									
-							if(strcmp(*(token) , "SALIR") == 0)
-							{
-								n=0;
-							}
-							if(strcmp(*(token) , "RES") == 0)
-							{
-								//Logica para pedir las matrices
-								printf("FILE 1: %s\n", *(token+1));
-								printf("FILE 2: %s\n", *(token+2));
-								
-							}
-							if(strcmp(*(token) , "SUM") == 0)
-							{
-								//Logica para pedir las matrices
-								printf("FILE 1: %s\n", *(token+1));
-								printf("FILE 2: %s\n", *(token+2));
-							}
+							char* operacion = strtok (teclado," ");
+							
+							if( strcmp(operacion, "SUMA")==0)
+								{
+										/*Obtengo las cadenas para poder procesarlas	*/
+										char *file1 = strtok (NULL," ");
+										char *file2 = strtok (NULL," ");
+										printf( "FILE 1 : %s\n", file1 );
+										printf( "FILE 2 : %s\n", file2 );
+								}
 							else 
-							{
-								printf("Parametro Invalido\n");
-							}
-							free(token);
+								{
+								if( strcmp(operacion, "RESTA")==0)
+									{
+										/*Obtengo las cadenas para poder procesarlas	*/
+										char *file1 = strtok (NULL," ");
+										char *file2 = strtok (NULL," ");
+										printf( "FILE 1 : %s\n", file1 );
+										printf( "FILE 2 : %s\n", file2 );
+									}
+								else if( strcmp(operacion, "SALIR")==0)
+									{
+										/*Verifico que no sea un operacion invalida	*/
+										n=0;
+									}
+									else if( strcmp(operacion, "HELP")==0)
+									{
+										system("clear");
+										showHelpClient();
+									}
+									else 
+										{ 
+												printf("Operacion Invalida\n");
+										}
+							
+								}
+						
+							
 						}	
 						
 						break;
