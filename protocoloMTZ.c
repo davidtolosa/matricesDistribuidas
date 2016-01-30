@@ -25,11 +25,11 @@ int leerBytes(int sd, void *buffer, int len)
     return (leido);
 }
 
-int leer_mensaje(int sd, protocoloMTZ *mjs )
+int leer_mensaje(int sd, protocoloMTZ * mjs )
 {
-  int n;
-  headerMTZ head;
-  bodyMTZ body;
+	int n=0;
+	headerMTZ head;
+	bodyMTZ body;
 	char * buffer=NULL;
 
   n = leerBytes (sd, &head , HEADER_LENGHT );
@@ -57,9 +57,8 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
 /*				exit(EXIT_FAILURE);*/
 /*			}*/
 /*			memset(buffer,0, mjs->header.lenght+1);*/
-					buffer = (char *) malloc(mjs->header.lenght - HEADER_LENGHT);
+					buffer = (char *) malloc(mjs->header.lenght - HEADER_LENGHT + 1);
 					memset(buffer,0, mjs->header.lenght - HEADER_LENGHT);
-
 					n = leerBytes (sd, buffer, mjs->header.lenght - HEADER_LENGHT);
 
           if (n != 0) {
@@ -67,8 +66,9 @@ int leer_mensaje(int sd, protocoloMTZ *mjs )
             printf("Body %s: \n", buffer);
 						printf("--------------------------------\n\n");
             #endif
-						mjs->body.mensage = (char *) malloc (sizeof(char)* strlen(buffer));
-						strcpy(mjs->body.mensage, buffer);
+						mjs->body.mensage = (char *) malloc (sizeof(char)* strlen(buffer)+1);
+						//strcpy(mjs->body.mensage, buffer);
+						mjs->body.mensage = buffer;
 						fflush(stdout);
 						return n;
 					}
@@ -96,13 +96,13 @@ uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
   mensaje.header.codigo=codigo;
 
   //preparo los datos para poder ser enviados y armo el paquete.
-  datos = malloc( sizeof(char) * strlen(mensajes));
-  memset(datos,0, strlen(mensajes));
+  datos = (char *) malloc( sizeof(char) * (strlen(mensajes)+1));
+  memset(datos,0, strlen(mensajes)+1);
   sprintf(datos,"%s",mensajes);
   //---------------------------------------------
   mensaje.body.mensage = datos;
 
-  uint32_t  lon =  HEADER_LENGHT + (sizeof(char)*((strlen(mensaje.body.mensage) + 1))); //longitud total del mensaje
+  uint32_t  lon =  HEADER_LENGHT + (sizeof(char)*((strlen(mensaje.body.mensage))+1)); //longitud total del mensaje
   mensaje.header.lenght = lon;
  // mensaje.header.lenght = htons( sizeof(mensaje));
   #ifdef DEBUG
@@ -123,7 +123,8 @@ uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
 
   memset(buffer,0,lon);
   memcpy ( buffer , &mensaje.header , HEADER_LENGHT);	 // Guarda al inicio del buffer el código y longitud del mensaje
-  memcpy ( buffer + HEADER_LENGHT, mensaje.body.mensage , lon ); // Por último guarda el mensaje
+  memcpy ( buffer + HEADER_LENGHT, mensaje.body.mensage , lon - HEADER_LENGHT ); // Por último guarda el mensaje
+ 
   fflush(stdout);
 
   n = send (sd, buffer, lon  , 0);	// envia los datos!
@@ -133,6 +134,7 @@ uint16_t enviar_mensaje(int sd, int codigo, char * mensajes)
   #endif
 
   free(buffer);
+  free(datos);
 
   return (n);
 }

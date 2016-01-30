@@ -20,8 +20,6 @@ void slot_closeMTZ ( int signal)
 	printf("Se ha precionado Ctrl-c \n");
 	signalClose=1;
 	
-	exit(signal);
-	
 }
 
 void *cliente (void *);
@@ -29,7 +27,7 @@ void *cliente (void *);
 int main() {
 	
 	//Signal para cerrar la app
-	signal(SIGINT, slot_closeMTZ);
+	//signal(SIGINT, slot_closeMTZ);
 	signalClose=0;
 
 	int lon;
@@ -54,7 +52,7 @@ int main() {
 
 	listen ( sd , 5);
 
-	while (signalClose!=1) {
+	while (1) {
 
 		lon = sizeof(sock_cliente);
 
@@ -72,7 +70,7 @@ void *cliente ( void *arg ) {
 
 	int sdc;
 	int n;
-	protocoloMTZ mjs;
+	
 	int threadType=0;
 
 	//suma = (struct psuma *) buffer;
@@ -83,17 +81,20 @@ void *cliente ( void *arg ) {
 	printf("Nuevo Cliente:%i \n",sdc);
 
 	n = 1;
-	while ( n != 0) {
+	while ( (n != 0)) {
 
-	n = leer_mensaje(sdc, &mjs);
+	protocoloMTZ *mjs;
+	mjs = (protocoloMTZ*) malloc(sizeof(protocoloMTZ));
+	
+	n = leer_mensaje(sdc, mjs);
 
 	if( n > 0)
 		{
-			switch (mjs.header.codigo)
+			switch (mjs->header.codigo)
 			{
 				case SOLICITUD_CLIENTE:
 				{
-					printf("Cliente say: %s\n", mjs.body.mensage);
+					printf("Cliente say: %s\n", mjs->body.mensage);
 					printf("--------------------------------\n");
 
 					threadType = SOLICITUD_CLIENTE;
@@ -101,11 +102,13 @@ void *cliente ( void *arg ) {
 					//Cuando un cliente se conecta.
 					newClient(sdc);
 					enviar_mensaje(sdc, ACK_CLIENTE_REGISTER, "Hola Cliente. Espero sus actividades\n");
+					
+					free(mjs);
 					break;
 				}
 				case SOLICITUD_WORKER:
 				{
-					printf("Cliente say: %s\n", mjs.body.mensage);
+					printf("Cliente say: %s\n", mjs->body.mensage);
 					printf("--------------------------------\n");
 					threadType = SOLICITUD_WORKER;
 
@@ -114,40 +117,53 @@ void *cliente ( void *arg ) {
 					
 					enviar_mensaje(sdc, ACK_WORKER_REGISTER, "Hola Worker\n");
 					
+					free(mjs);
 					break;
 				}
 			default:
-					break;
+					{
+						
+						
+						break;
+					}
+					
 			}
 		}
 		else
 		{
 			n = 0;
+			free(mjs);
+			printf("Me despido\n");
+			switch (threadType) {
+			case SOLICITUD_CLIENTE:
+				{
+					
+					if(deleteClient(sdc) ==1)
+						printf("---Cliente desconectado---\n");
+					else
+						printf("ERROR BD\n");	
+					break;
+				}
+			case SOLICITUD_WORKER:
+				{
+					deleteWorker(sdc);
+					printf("---Worker desconectado---\n");
+					break;
+				}
+			default:
+				break;
+			}
+			//Cuando se desconecta elimino Cliente/worker
+			close (sdc);
+		
+		
 		}
-}
-
-//Cuando se desconecta elimino Cliente/worker
 	
-	printf("Me despido\n");
-	switch (threadType) {
-		case SOLICITUD_CLIENTE:
-		{
-			
-			if(deleteClient(sdc) ==1)
-				printf("---Cliente desconectado---\n");
-			else
-				printf("ERROR BD\n");	
-			break;
-		}
-		case SOLICITUD_WORKER:
-		{
-			deleteWorker(sdc);
-			printf("---Worker desconectado---\n");
-			break;
-		}
-		default:
-			break;
 	}
 
-close (sdc);
+
+	
+	
+	
+	
 }

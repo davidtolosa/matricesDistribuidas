@@ -16,7 +16,6 @@ void slot_closeMTZ ( int signal)
 {
 	printf("Se ha precionado Ctrl-c \n");
 	signalClose=1;
-	
 	exit(signal);
 	
 }
@@ -80,47 +79,50 @@ int main(int argc, char *argv[]) {
 	}
 
 
-	protocoloMTZ mjs;
 
 	while ((n!=0) || (signalClose!=1)) {
 
-
-		n = leer_mensaje(sd, &mjs);
+		
+		protocoloMTZ *mjs;
+		mjs = (protocoloMTZ*) malloc(sizeof(protocoloMTZ));
+		n = leer_mensaje(sd, mjs);
 
 		if( n > 0)
 		{
-			switch (mjs.header.codigo)
+			switch (mjs->header.codigo)
 			{
-			case ACK_CLIENTE_REGISTER:
-				{
-					/*printf("Server say: %s\n", mjs.body.mensage);
-					printf("--------------------------------\n");
-					*/
-					//showHelpClient();
+				case ACK_CLIENTE_REGISTER:
+					{
+						printf("Server say: %s\n", mjs->body.mensage);
+						printf("--------------------------------\n");
+						showHelpClient();
 
-					fgets(teclado, sizeof(teclado), stdin);
-					teclado[strlen(teclado) - 1] = '\0';
-					fflush(stdin);
+						fgets(teclado, sizeof(teclado), stdin);
+						teclado[strlen(teclado) - 1] = '\0';
+						fflush(stdin);
 
-					printf("%s\n",teclado);
+						printf("%s\n",teclado);
+						
+						fflush(stdout);
+						break;
+					}
+				case ACK_WORKER_REGISTER:
+					{
+						printf("Server say: %s\n", mjs->body.mensage);
+						printf("--------------------------------\n");
+
+						break;
+					}
+				default:
 					break;
 				}
-			case ACK_WORKER_REGISTER:
-				{
-					printf("Server say: %s\n", mjs.body.mensage);
-					printf("--------------------------------\n");
-
-					break;
-				}
-			default:
-				break;
 			}
-		}
 		else
 			{
 				n = 0;
 			}
-
+		
+		free(mjs);
 
 
 	}
