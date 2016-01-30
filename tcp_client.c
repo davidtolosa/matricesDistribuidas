@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
 
 
 
-	while ((n!=0) || (signalClose!=1)) {
+	while ((n!=0)) {
 
 		
 		protocoloMTZ *mjs;
@@ -95,15 +95,42 @@ int main(int argc, char *argv[]) {
 					{
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-						showHelpClient();
-
-						fgets(teclado, sizeof(teclado), stdin);
-						teclado[strlen(teclado) - 1] = '\0';
-						fflush(stdin);
-
-						printf("%s\n",teclado);
 						
-						fflush(stdout);
+						while(n!=0)
+						{
+							showHelpClient();
+
+							fgets(teclado, sizeof(teclado), stdin);
+							teclado[strlen(teclado) - 1] = '\0';
+							fflush(stdin);
+							
+							char** token;
+							token = str_split(&teclado, ' ');
+									
+							if(strcmp(*(token) , "SALIR") == 0)
+							{
+								n=0;
+							}
+							if(strcmp(*(token) , "RES") == 0)
+							{
+								//Logica para pedir las matrices
+								printf("FILE 1: %s\n", *(token+1));
+								printf("FILE 2: %s\n", *(token+2));
+								
+							}
+							if(strcmp(*(token) , "SUM") == 0)
+							{
+								//Logica para pedir las matrices
+								printf("FILE 1: %s\n", *(token+1));
+								printf("FILE 2: %s\n", *(token+2));
+							}
+							else 
+							{
+								printf("Parametro Invalido\n");
+							}
+							free(token);
+						}	
+						
 						break;
 					}
 				case ACK_WORKER_REGISTER:
@@ -126,7 +153,9 @@ int main(int argc, char *argv[]) {
 
 
 	}
-	printf("El servidor dejo de prestar servicio\n");
+	printf("Desconectado del servidor\n");
 
 	close(sd);
+	
+	return(0);
 }
