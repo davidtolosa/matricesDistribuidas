@@ -136,10 +136,11 @@ Retorna:
 
 int createOperation(char *buffer, int id_cliente, int operacion)
 {
-	printf("%s + %s \n", M1_line,M1_line);
+
 	sqlite3 *handler;
 	handler = db_openDB(SQLITE_OPEN_READWRITE);
 	char query[256];
+	int fila=1;
 	
 	//obtengo las dos matrices
 	char* mat1 = strtok(buffer,";");
@@ -155,8 +156,8 @@ int createOperation(char *buffer, int id_cliente, int operacion)
 	{
 		
 		
-		sprintf(query, "INSERT INTO cliente (id_cliente) VALUES (%i);",sdc);
-		
+		sprintf(query, "INSERT INTO operaciones (id_cliente,valores, tipo_operacion,fila) VALUES (%i, '%s;%s',%i,%i);",id_cliente,M1_line,M2_line,operacion,fila);
+
 		if( db_insert_update_delete(handler, query) != SQLITE_OK )
 		{
 			printf("Error al cargar las operacionesn");
@@ -167,6 +168,7 @@ int createOperation(char *buffer, int id_cliente, int operacion)
 		
 		M1_line = strtok(NULL,"\n");
 		M2_line = strtok(NULL,"\n");
+		fila++;
 	}
 	
 	return 1;

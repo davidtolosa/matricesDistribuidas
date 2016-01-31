@@ -130,7 +130,7 @@ void *cliente ( void *arg ) {
 						
 						// VENDRIA LA LOGICA PARSEAR LAS OPERACIONES
 						
-						
+						createOperation(mjs->body.mensage, sdc, OPERACION_SUMA);
 						
 						
 						
