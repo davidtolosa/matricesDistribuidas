@@ -125,3 +125,49 @@ int deleteWorker(int sdc){
 			return 1;
 	    }
 }
+
+/*
+FUNCION
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
+*/
+
+int createOperation(char *buffer, int id_cliente, int operacion)
+{
+	printf("%s + %s \n", M1_line,M1_line);
+	sqlite3 *handler;
+	handler = db_openDB(SQLITE_OPEN_READWRITE);
+	char query[256];
+	
+	//obtengo las dos matrices
+	char* mat1 = strtok(buffer,";");
+	char* mat2 = strtok(NULL,";");
+	
+	printf("M1 : %s \n", mat1);
+	printf("M2 : %s \n", mat2);
+	
+	char *M1_line = strtok(mat1,"\n");
+	char *M2_line = strtok(mat2,"\n");
+	
+	while  ((M1_line != NULL) || (M2_line != NULL))
+	{
+		
+		
+		sprintf(query, "INSERT INTO cliente (id_cliente) VALUES (%i);",sdc);
+		
+		if( db_insert_update_delete(handler, query) != SQLITE_OK )
+		{
+			printf("Error al cargar las operacionesn");
+			db_closeDB(handler); // cierro la conexion
+			return 0;
+		}
+			
+		
+		M1_line = strtok(NULL,"\n");
+		M2_line = strtok(NULL,"\n");
+	}
+	
+	return 1;
+}
