@@ -128,6 +128,14 @@ void *cliente ( void *arg ) {
 						
 						enviar_mensaje(sdc, ACK_OPERACION, "Operacion recibida aguarde por los resultados.\n");
 						
+						// VENDRIA LA LOGICA PARSEAR LAS OPERACIONES
+						
+						
+						
+						
+						
+						//--------------------------------------------------
+						
 						free(mjs);
 						break;
 					}

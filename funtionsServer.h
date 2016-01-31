@@ -11,3 +11,4 @@ int newClient(int sdc);
 int deleteClient(int sdc);
 int newWorker(int sdc);
 int deleteWorker(int sdc);
+int createOperation(char *buffer, int id_cliente, int operacion);
