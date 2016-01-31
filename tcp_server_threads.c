@@ -120,6 +120,17 @@ void *cliente ( void *arg ) {
 					free(mjs);
 					break;
 				}
+				case OPERACION_SUMA:
+					{
+						printf("Cliente say: %s\n", mjs->body.mensage);
+						printf("--------------------------------\n");
+					
+						
+						enviar_mensaje(sdc, ACK_OPERACION, "Operacion recibida aguarde por los resultados.\n");
+						
+						free(mjs);
+						break;
+					}
 			default:
 					{
 						

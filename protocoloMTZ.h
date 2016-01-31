@@ -12,10 +12,19 @@ En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
 //Codigo del tipo 40X - CONFIRMACION ACK
 #define ACK_CLIENTE_REGISTER 401
 #define ACK_WORKER_REGISTER 402
+#define ACK_OPERACION 403
+
+
+
 //....................................................
 //codigos del tipo 10X - SOLICITUDES DE CONEXION.
 #define SOLICITUD_CLIENTE 101
 #define SOLICITUD_WORKER 102
+
+//....................................................
+//Codigo del tipo 20X - OPERACIONES 
+#define OPERACION_SUMA 201
+#define OPERACION_RESTA 202
 
 
 //DECLARACION DE LA ESTRUCTURA DEL MENSAJE

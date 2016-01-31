@@ -2,20 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <arpa/inet.h>
 
-
-// Este tipo de dato nos permite saber el orden de una matris.
-typedef struct orden {
-	
-	int filas;
-	int columnas;
-	
-}ordenMTZ;
 
 void showHelpClient();
 
+int showConsole(int sd);
+	
+char* createBuffer(char* M1, char* M2);
 
-ordenMTZ* obtainMTZ( char *file);
-
-int validateOperation(ordenMTZ *M1 , ordenMTZ *M2);
-
+char* obtainMTZ(char* file);
