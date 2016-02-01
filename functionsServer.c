@@ -1,4 +1,5 @@
 #include "funtionsServer.h"
+#include "protocoloMTZ.h"
 
 /*
 FUNCION
@@ -236,8 +237,6 @@ int getSendWork(int sdc)
 
   sqlite3 *handle =db_openDB(SQLITE_OPEN_READONLY);
 
-  printf("ENTRO A getSendWork");
-
   sprintf(query,"SELECT id_suboperacion,tipo_operacion,valores FROM operaciones WHERE id_worker ISNULL AND resultado ISNULL ORDER BY RANDOM() LIMIT 1;");
   retval = db_selectDB(handle, query, &stmt);
 
@@ -254,11 +253,18 @@ int getSendWork(int sdc)
 
       printf("Trabajo Obtenido para el Worker:\n ID SUBOPERACION:%i TIPO:%i VALORES:%s\n",id_suboperacion,tipo_operacion,valores);
 
+	  
+	  
       return 1;
     } else {
 
-      sqlite3_finalize(stmt);
+      
+		
+	  sqlite3_finalize(stmt);
       db_closeDB(handle);
+	  
+	  //si no hay trabajos respondo con un mensaje informando que no hay.
+	  enviar_mensaje(sdc, SIN_TRABAJOS, "Aun no tengo Trabajos");
 
       return 0;
     }

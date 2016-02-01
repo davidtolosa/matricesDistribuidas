@@ -123,6 +123,19 @@ int main(int argc, char *argv[]) {
 
 						break;
 					}
+					
+				case SIN_TRABAJOS:
+					{
+						printf("Server say: %s\n", mjs->body.mensage);
+						printf("--------------------------------\n");
+						
+						sleep(2);
+						askForWork(sd);
+						
+						
+						
+						break;
+					}
 				default:
 					break;
 				}
