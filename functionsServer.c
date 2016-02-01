@@ -259,10 +259,10 @@ int getSendWork(int sdc,int *id_suboper)
         }
         case 202:
         {
+          printf("ENVIAR TRABAJO RESTA");
+          enviar_mensaje(sdc,ASIGNACION_TRABAJO_RESTA,valores);
+          break;
         }
-        printf("ENVIAR TRABAJO RESTA");
-        enviar_mensaje(sdc,ASIGNACION_TRABAJO_RESTA,valores);
-        break;
         default:
         {
           break;
