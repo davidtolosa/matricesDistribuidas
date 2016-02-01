@@ -129,11 +129,15 @@ void *cliente ( void *arg ) {
 						enviar_mensaje(sdc, ACK_OPERACION, "Operacion recibida aguarde por los resultados.\n");
 
 						// VENDRIA LA LOGICA PARSEAR LAS OPERACIONES
+<<<<<<< HEAD
 
 						createOperation(mjs->body.mensage, sdc, OPERACION_SUMA);
 
 
 
+=======
+							createOperation(mjs->body.mensage, sdc, OPERACION_SUMA);
+>>>>>>> 0754d5ec3f02a915338b93ac4a39cb2763e009d4
 						//--------------------------------------------------
 
 						free(mjs);

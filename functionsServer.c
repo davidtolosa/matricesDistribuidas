@@ -134,45 +134,95 @@ Recibe:
 Retorna:
 */
 
-int createOperation(char *buffer, int id_cliente, int operacion)
+char** split_delim (char* string,  char* delim)
+{
+	char** result =0;
+
+	char* s_temp=0;
+
+	char* fila_aux=0;
+	char* fila_aux_temp=0;
+	int count_fila=0;
+
+	s_temp = strdup(string);
+	//Cuento cuantos delimitadores tengo
+	fila_aux = strtok(s_temp, delim);
+	while(fila_aux != NULL)
+	{
+		if ( strlen(fila_aux) > 2)
+			count_fila++;
+
+		fila_aux = strtok(0,delim);
+	}
+
+	//Reservo la memoria para los vectores
+
+	result = malloc (sizeof(char) * count_fila + strlen(string));
+
+	//ahora estraigo cada cadena y la guardo en el vector resultado
+
+	count_fila=0;
+
+	fila_aux_temp = strtok(string, delim);
+
+	while(fila_aux_temp != NULL)
+	{
+		if ( strlen(fila_aux_temp) > 2)
+		{
+
+			*(result + count_fila ) = strdup(fila_aux_temp);
+			count_fila++;
+		}
+
+		fila_aux_temp = strtok(0, delim);
+	}
+
+
+	return result;
+
+}
+
+/*
+FUNCION
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
+*/
+
+int createOperation(char *buffer, int id_cli, int id_ope)
 {
 
+	int i=0;
+//variables para la BD
 	sqlite3 *handler;
 	handler = db_openDB(SQLITE_OPEN_READWRITE);
 	char query[256];
-	int fila=1;
 
-	//obtengo las dos matrices
+//obtengo las matrices
 	char* mat1 = strtok(buffer,";");
 	char* mat2 = strtok(NULL,";");
+	char** filas_m1 =NULL;
+	char** filas_m2 =NULL;
+//obtengo las filas de las matrices
+	filas_m1 = split_delim(mat1 , "\n");
+	filas_m2 = split_delim(mat2 , "\n");
 
-	printf("M1 : %s \n", mat1);
-	printf("M2 : %s \n", mat2);
 
-	char *M1_line = strtok(mat1,"\n");
-	char *M2_line = strtok(mat2,"\n");
-
-	while ((M1_line != NULL))
+	while(*(filas_m1 + i) != NULL)
 	{
-    printf("FILA:%i:%s\n",fila,M1_line);
-    printf("FILA:%i:%s\n",fila,M1_line);
-
-		sprintf(query, "INSERT INTO operaciones (id_cliente,valores, tipo_operacion,fila) VALUES (%i, '%s;%s',%i,%i);",id_cliente,M1_line,M2_line,operacion,fila);
+		sprintf(query, "INSERT INTO operaciones (tipo_operacion, valores,fila,id_cliente) VALUES (%i,'%s;%s',%i,%i);",id_ope,*(filas_m1 + i),*(filas_m2 + i),i,id_cli);
 
 		if( db_insert_update_delete(handler, query) != SQLITE_OK )
 		{
-			printf("Error al cargar las operacionesn");
+			printf("No se pudo cargar la operacion\n");
 			db_closeDB(handler); // cierro la conexion
 			return 0;
 		}
 
-
-		M1_line = strtok(NULL,"\n");
-		M2_line = strtok(NULL,"\n");
-		fila++;
+		i++;
 	}
 
-	return 1;
 }
 
 int getSendWork(int sdc)
