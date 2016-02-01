@@ -232,17 +232,18 @@ int getSendWork(int sdc)
   int id_suboperacion;
   int tipo_operacion;
   char *valores;
+  int retval;
 
-  sqlite3 *handle =db_conectar(SQLITE_OPEN_READONLY);
+  sqlite3 *handle =db_openDB(SQLITE_OPEN_READONLY);
+
+  printf("ENTRO A getSendWork");
 
   sprintf(query,"SELECT id_suboperacion,tipo_operacion,valores FROM operaciones WHERE id_worker ISNULL AND resultado ISNULL ORDER BY RANDOM() LIMIT 1;");
-  int retval = sqlite3_prepare_v2(handle, query, -1, &stmt, 0);
+  retval = db_selectDB(handle, query, &stmt);
 
   if(retval) {
     printf("Error %i al obtener un trabajo para el Worker.\n",retval);
   }
-
-  retval = sqlite3_step(stmt);
 
   if (retval == SQLITE_ROW) {
 
@@ -257,7 +258,7 @@ int getSendWork(int sdc)
     } else {
 
       sqlite3_finalize(stmt);
-      db_desconectar(handle);
+      db_closeDB(handle);
 
       return 0;
     }
