@@ -152,7 +152,7 @@ int createOperation(char *buffer, int id_cliente, int operacion)
 	char *M1_line = strtok(mat1,"\n");
 	char *M2_line = strtok(mat2,"\n");
 
-	while  ((M1_line != NULL))
+	while ((M1_line != NULL))
 	{
     printf("FILA:%i:%s\n",fila,M1_line);
     printf("FILA:%i:%s\n",fila,M1_line);
