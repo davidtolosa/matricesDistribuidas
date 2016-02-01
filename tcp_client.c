@@ -17,18 +17,18 @@ void slot_closeMTZ ( int signal)
 	printf("Se ha precionado Ctrl-c \n");
 	signalClose=1;
 	exit(signal);
-	
+
 }
 
 
 
 int main(int argc, char *argv[]) {
-	
+
 	//Signal para cerrar la app
 	signal(SIGINT, slot_closeMTZ);
 	signalClose=0;
-	
-	
+
+
 	int n = 1;
 	int sd;
 	int lon;
@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 
 	while ((n!=0)) {
 
-		
+
 		protocoloMTZ *mjs;
 		mjs = (protocoloMTZ*) malloc(sizeof(protocoloMTZ));
 		n = leer_mensaje(sd, mjs);
@@ -96,15 +96,15 @@ int main(int argc, char *argv[]) {
 					{
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-					
+
 						showHelpClient();
-						
+
 						if(showConsole(sd)<0)
 							n=0;
-						
-						
-							
-					
+
+
+
+
 						break;
 					}
 				case ACK_WORKER_REGISTER:
@@ -112,13 +112,15 @@ int main(int argc, char *argv[]) {
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
 
+						askForWork(sd);
+
 						break;
 					}
 				case ACK_OPERACION:
 					{
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-						
+
 						break;
 					}
 				default:
@@ -129,7 +131,7 @@ int main(int argc, char *argv[]) {
 			{
 				n = 0;
 			}
-		
+
 		free(mjs);
 
 
@@ -137,6 +139,6 @@ int main(int argc, char *argv[]) {
 	printf("Desconectado del servidor\n");
 
 	close(sd);
-	
+
 	return(0);
 }

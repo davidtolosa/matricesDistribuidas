@@ -19,13 +19,13 @@ void slot_closeMTZ ( int signal)
 {
 	printf("Se ha precionado Ctrl-c \n");
 	signalClose=1;
-	
+
 }
 
 void *cliente (void *);
 
 int main() {
-	
+
 	//Signal para cerrar la app
 	//signal(SIGINT, slot_closeMTZ);
 	signalClose=0;
@@ -70,7 +70,7 @@ void *cliente ( void *arg ) {
 
 	int sdc;
 	int n;
-	
+
 	int threadType=0;
 
 	//suma = (struct psuma *) buffer;
@@ -85,7 +85,7 @@ void *cliente ( void *arg ) {
 
 	protocoloMTZ *mjs;
 	mjs = (protocoloMTZ*) malloc(sizeof(protocoloMTZ));
-	
+
 	n = leer_mensaje(sdc, mjs);
 
 	if( n > 0)
@@ -102,7 +102,7 @@ void *cliente ( void *arg ) {
 					//Cuando un cliente se conecta.
 					newClient(sdc);
 					enviar_mensaje(sdc, ACK_CLIENTE_REGISTER, "Hola Cliente. Espero sus actividades\n");
-					
+
 					free(mjs);
 					break;
 				}
@@ -114,9 +114,9 @@ void *cliente ( void *arg ) {
 
 					//Cuando un Worker se conecta
 					newWorker(sdc);
-					
+
 					enviar_mensaje(sdc, ACK_WORKER_REGISTER, "Hola Worker\n");
-					
+
 					free(mjs);
 					break;
 				}
@@ -124,28 +124,35 @@ void *cliente ( void *arg ) {
 					{
 						printf("Cliente say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-					
-						
+
+
 						enviar_mensaje(sdc, ACK_OPERACION, "Operacion recibida aguarde por los resultados.\n");
-						
+
 						// VENDRIA LA LOGICA PARSEAR LAS OPERACIONES
-						
+
 						createOperation(mjs->body.mensage, sdc, OPERACION_SUMA);
-						
-						
-						
+
+
+
 						//--------------------------------------------------
-						
+
 						free(mjs);
+						break;
+					}
+				case SOLICITUD_TRABAJO:
+					{
+						printf("Worker dice:%s\n", mjs->body.mensage);
+
+						
 						break;
 					}
 			default:
 					{
-						
-						
+
+
 						break;
 					}
-					
+
 			}
 		}
 		else
@@ -156,11 +163,11 @@ void *cliente ( void *arg ) {
 			switch (threadType) {
 			case SOLICITUD_CLIENTE:
 				{
-					
+
 					if(deleteClient(sdc) ==1)
 						printf("---Cliente desconectado---\n");
 					else
-						printf("ERROR BD\n");	
+						printf("ERROR BD\n");
 					break;
 				}
 			case SOLICITUD_WORKER:
@@ -174,15 +181,15 @@ void *cliente ( void *arg ) {
 			}
 			//Cuando se desconecta elimino Cliente/worker
 			close (sdc);
-		
-		
+
+
 		}
-	
+
 	}
 
 
-	
-	
-	
-	
+
+
+
+
 }

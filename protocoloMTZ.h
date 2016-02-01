@@ -13,8 +13,7 @@ En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
 #define ACK_CLIENTE_REGISTER 401
 #define ACK_WORKER_REGISTER 402
 #define ACK_OPERACION 403
-
-
+#define ACK_SOLICITUD_TRABAJO 404
 
 //....................................................
 //codigos del tipo 10X - SOLICITUDES DE CONEXION.
@@ -22,9 +21,14 @@ En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
 #define SOLICITUD_WORKER 102
 
 //....................................................
-//Codigo del tipo 20X - OPERACIONES 
+//Codigo del tipo 20X - OPERACIONES
 #define OPERACION_SUMA 201
 #define OPERACION_RESTA 202
+
+//....................................................
+//Codigo del tipo 30X - WORKER
+#define SOLICITUD_TRABAJO 301
+#define RESULTADO_TRABAJO 202
 
 
 //DECLARACION DE LA ESTRUCTURA DEL MENSAJE

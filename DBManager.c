@@ -12,10 +12,8 @@ Retorna: Puntero a la conexion que se creo.
 */
 sqlite3* db_openDB(int flag){
 
-
-
 	sqlite3 *handle;
-	int retval = sqlite3_open_v2("dbMTZ.sqlite3",&handle,flag,0);
+	int retval = sqlite3_open_v2("../dbMTZ.sqlite3",&handle,flag,0);
 
 
 	if(retval!=SQLITE_OK)
@@ -27,8 +25,6 @@ sqlite3* db_openDB(int flag){
 	  { printf("Open database.\n");
 		return handle;
 	  }
-
-
 }
 
 /*
@@ -122,6 +118,9 @@ void initDB(){
 		retval = db_insert_update_delete(handle, query);
 
 		sprintf(query, "DELETE FROM worker;");
+		retval = db_insert_update_delete(handle, query);
+
+		sprintf(query, "DELETE FROM operaciones;");
 		retval = db_insert_update_delete(handle, query);
 
 		sqlite3_exec(handle, "END", 0, 0, 0);
