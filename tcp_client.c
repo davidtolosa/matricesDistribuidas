@@ -123,19 +123,31 @@ int main(int argc, char *argv[]) {
 
 						break;
 					}
-					
+
 				case SIN_TRABAJOS:
 					{
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-						
-						sleep(2);
-						askForWork(sd);
-						
-						
-						
+
+						/*sleep(2);
+						askForWork(sd);*/
 						break;
 					}
+				case ASIGNACION_TRABAJO_SUMA:
+					{
+						printf("Server say: %s\n", mjs->body.mensage);
+						printf("--------------------------------\n");
+
+						break;
+					}
+				case ASIGNACION_TRABAJO_RESTA:
+					{
+							printf("Server say: %s\n", mjs->body.mensage);
+							printf("--------------------------------\n");
+
+							break;
+					}
+
 				default:
 					break;
 				}

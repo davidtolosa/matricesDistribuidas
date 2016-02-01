@@ -226,7 +226,7 @@ int createOperation(char *buffer, int id_cli, int id_ope)
 
 }
 
-int getSendWork(int sdc)
+int getSendWork(int sdc,int *id_suboper)
 {
   sqlite3_stmt *stmt;
   char query[256];
@@ -239,10 +239,7 @@ int getSendWork(int sdc)
 
   sprintf(query,"SELECT id_suboperacion,tipo_operacion,valores FROM operaciones WHERE id_worker ISNULL AND resultado ISNULL ORDER BY RANDOM() LIMIT 1;");
   retval = db_selectDB(handle, query, &stmt);
-
-  if(retval) {
-    printf("Error %i al obtener un trabajo para el Worker.\n",retval);
-  }
+  retval = db_fetchDB(stmt);
 
   if (retval == SQLITE_ROW) {
 
@@ -253,20 +250,38 @@ int getSendWork(int sdc)
 
       printf("Trabajo Obtenido para el Worker:\n ID SUBOPERACION:%i TIPO:%i VALORES:%s\n",id_suboperacion,tipo_operacion,valores);
 
-	  
-	  
+      switch (id_suboperacion) {
+        case 201:
+        {
+          printf("ENVIAR TRABAJO SUMA");
+          enviar_mensaje(sdc,ASIGNACION_TRABAJO_SUMA,valores);
+          break;
+        }
+        case 202:
+        {
+        }
+        printf("ENVIAR TRABAJO RESTA");
+        enviar_mensaje(sdc,ASIGNACION_TRABAJO_RESTA,valores);
+        break;
+        default:
+        {
+          break;
+        }
+      }
+
+      *id_suboper = id_suboperacion;
+
       return 1;
     } else {
 
-      
-		
-	  sqlite3_finalize(stmt);
+	    sqlite3_finalize(stmt);
       db_closeDB(handle);
-	  
-	  //si no hay trabajos respondo con un mensaje informando que no hay.
-	  enviar_mensaje(sdc, SIN_TRABAJOS, "Aun no tengo Trabajos");
+
+	    //si no hay trabajos respondo con un mensaje informando que no hay.
+      printf("No hay trabajo para el worker%i\n",sdc);
+
+      enviar_mensaje(sdc, SIN_TRABAJOS, "Aun no tengo Trabajos");
 
       return 0;
     }
-
 }

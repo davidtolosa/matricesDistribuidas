@@ -28,8 +28,10 @@ En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
 //....................................................
 //Codigo del tipo 30X - WORKER
 #define SOLICITUD_TRABAJO 301
-#define RESULTADO_TRABAJO 302
-#define SIN_TRABAJOS 303
+#define ASIGNACION_TRABAJO_SUMA 302
+#define ASIGNACION_TRABAJO_RESTA 304
+#define RESULTADO_TRABAJO 305
+#define SIN_TRABAJOS 306
 
 //DECLARACION DE LA ESTRUCTURA DEL MENSAJE
 #define HEADER_LENGHT sizeof(headerMTZ)

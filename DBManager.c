@@ -13,7 +13,7 @@ Retorna: Puntero a la conexion que se creo.
 sqlite3* db_openDB(int flag){
 
 	sqlite3 *handle;
-	int retval = sqlite3_open_v2("./dbMTZ.sqlite3",&handle,flag,0);
+	int retval = sqlite3_open_v2("../dbMTZ.sqlite3",&handle,flag,0);
 
 
 	if(retval!=SQLITE_OK)
@@ -66,6 +66,22 @@ int db_selectDB(sqlite3 *handle, char *query, sqlite3_stmt  **stmt)
 
   return retval;
 }
+
+int db_fetchDB( sqlite3_stmt *stmt){
+
+  int retval,i;
+
+  retval = sqlite3_step(stmt);
+  while (retval == SQLITE_BUSY) {
+    printf("--> BUSSY sqlite3_step\n ");
+    retval = rand()%999999;
+    for(i=0; i<retval; i++);
+    retval = sqlite3_step(stmt);
+  }
+
+  return retval;
+}
+
 /*
 FUNCION
 Descipcion : Realiza una consulta del tipo INSERT|UPDATE|DELETE contra la DB.

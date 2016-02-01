@@ -216,6 +216,6 @@ char* obtainMTZ(char* file)
 
 int askForWork(int sd){
 
-		enviar_mensaje(sd,SOLICITUD_TRABAJO,"Server Necesito Trabajar");
+		enviar_mensaje(sd,SOLICITUD_TRABAJO,"Estoy listo para trabajar");
 
 }

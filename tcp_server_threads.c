@@ -72,6 +72,7 @@ void *cliente ( void *arg ) {
 	int n;
 
 	int threadType=0;
+	int id_suboper_worker=0;
 
 	//suma = (struct psuma *) buffer;
 
@@ -140,7 +141,11 @@ void *cliente ( void *arg ) {
 					{
 						printf("Worker dice:%s\n", mjs->body.mensage);
 
-						getSendWork(sdc);
+						while (getSendWork(sdc,&id_suboper_worker)!=1) {
+							sleep(2);
+						}
+
+						printf("ID SUBOPERACION WORKER:%i\n",id_suboper_worker);
 
 						break;
 					}
