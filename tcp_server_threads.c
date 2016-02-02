@@ -137,6 +137,22 @@ void *cliente ( void *arg ) {
 						free(mjs);
 						break;
 					}
+				case OPERACION_RESTA:
+						{
+							printf("Cliente say: %s\n", mjs->body.mensage);
+							printf("--------------------------------\n");
+
+
+							enviar_mensaje(sdc, ACK_OPERACION, "Operacion recibida aguarde por los resultados.\n");
+
+							// VENDRIA LA LOGICA PARSEAR LAS OPERACIONES
+							createOperation(mjs->body.mensage, sdc, OPERACION_RESTA);
+
+							//--------------------------------------------------
+
+							free(mjs);
+							break;
+						}
 				case SOLICITUD_TRABAJO:
 					{
 						printf("Worker dice:%s\n", mjs->body.mensage);

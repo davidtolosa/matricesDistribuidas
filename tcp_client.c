@@ -17,17 +17,13 @@ void slot_closeMTZ ( int signal)
 	printf("Se ha precionado Ctrl-c \n");
 	signalClose=1;
 	exit(signal);
-
 }
-
-
 
 int main(int argc, char *argv[]) {
 
 	//Signal para cerrar la app
 	signal(SIGINT, slot_closeMTZ);
 	signalClose=0;
-
 
 	int n = 1;
 	int sd;
@@ -79,10 +75,7 @@ int main(int argc, char *argv[]) {
 
 	}
 
-
-
 	while ((n!=0)) {
-
 
 		protocoloMTZ *mjs;
 		mjs = (protocoloMTZ*) malloc(sizeof(protocoloMTZ));
@@ -102,9 +95,6 @@ int main(int argc, char *argv[]) {
 						if(showConsole(sd)<0)
 							n=0;
 
-
-
-
 						break;
 					}
 				case ACK_WORKER_REGISTER:
@@ -120,7 +110,7 @@ int main(int argc, char *argv[]) {
 					{
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-						
+
 						break;
 					}
 				case ACK_OPERACION_WORKER:
@@ -128,6 +118,7 @@ int main(int argc, char *argv[]) {
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
 						askForWork(sd);
+
 						break;
 					}
 				case SIN_TRABAJOS:
@@ -143,23 +134,25 @@ int main(int argc, char *argv[]) {
 					{
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-						
+
 						char* resultado = NULL;
 						resultado = solverOperation(mjs->body.mensage, ASIGNACION_TRABAJO_SUMA);
-						
+
 						enviar_mensaje(sd , RESULTADO_TRABAJO, resultado);
-						
-				
-						
-						
+
 						break;
 					}
 				case ASIGNACION_TRABAJO_RESTA:
 					{
-							printf("Server say: %s\n", mjs->body.mensage);
-							printf("--------------------------------\n");
+						printf("Server say: %s\n", mjs->body.mensage);
+						printf("--------------------------------\n");
 
-							break;
+						char* resultado = NULL;
+						resultado = solverOperation(mjs->body.mensage, ASIGNACION_TRABAJO_RESTA);
+
+						enviar_mensaje(sd , RESULTADO_TRABAJO, resultado);
+
+						break;
 					}
 
 				default:

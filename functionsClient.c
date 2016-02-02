@@ -47,8 +47,6 @@ int showConsole(int sd)
 
 	while( showConsole !=0)
 	{
-
-
 		printf( "$ > ");
 		fgets(teclado, sizeof(teclado), stdin);
 		teclado[strlen(teclado) - 1] = '\0';
@@ -77,8 +75,6 @@ int showConsole(int sd)
 					enviar_mensaje(sd,OPERACION_SUMA,buffer);
 					//Salgo del bucle para esperar la respuesta
 					showConsole=0;
-
-
 				}
 				else
 					{
@@ -86,14 +82,14 @@ int showConsole(int sd)
 					}
 			}
 			else
-				{
+					{
 					printf("No se encuentra el Archivo: %s \n",file1);
-				}
+					}
 
-			//--------------------------------------------------
-
-
-		}
+					//--------------------------------------------------
+					//END SUMA
+					//--------------------------------------------------
+			}
 		else
 			{
 				if( strcmp(operacion, "RESTA")==0)
@@ -103,17 +99,52 @@ int showConsole(int sd)
 					file2 = strtok (NULL," ");
 					printf( "FILE 1 : %s\n", file1 );
 					printf( "FILE 2 : %s\n", file2 );
+
+					// Intento  abrir los archivos y obtener las matrices
+					m1 = obtainMTZ(file1);
+					if(m1!=NULL)
+					{
+						//si el primer archivo esta correcto continuo
+						m2 = obtainMTZ(file2);
+						if(m2!=NULL)
+						{
+							//si el segundo archivo esta correcto empiezo a armar el mensaje a enviar
+							buffer = createBuffer(m1,m2);
+							enviar_mensaje(sd,OPERACION_RESTA,buffer);
+							//Salgo del bucle para esperar la respuesta
+							showConsole=0;
+						}
+						else
+							{
+								printf("No se encuentra el Archivo: %s \n",file2);
+							}
+					}
+					else
+							{
+								printf("No se encuentra el Archivo: %s \n",file1);
+							}
+
+							//--------------------------------------------------
+							//END RESTA
+							//--------------------------------------------------
 				}
 				else if( strcmp(operacion, "SALIR")==0)
 				{
 					exit=1;
 					showConsole=0;
 
+					//--------------------------------------------------
+					//END RESTA
+					//--------------------------------------------------
 				}
 				else if( strcmp(operacion, "HELP")==0)
 				{
 					system("clear");
 					showHelpClient();
+
+					//--------------------------------------------------
+					//END HELP
+					//--------------------------------------------------
 				}
 				else
 					{
@@ -121,9 +152,7 @@ int showConsole(int sd)
 					}
 
 			}
-
-
-	}
+		}
 
 	if( buffer)
 		free( buffer);
@@ -152,14 +181,10 @@ char* createBuffer(char* M1, char* M2)
 
 	buffer[M1_size-2] = ';';
 
-
 	buffer = (char *) realloc( buffer , ( sizeof(char)* (M1_size+M2_size)));
 	strcat(buffer,M2);
 
-
 	return buffer;
-
-
 }
 
 /*
@@ -171,7 +196,6 @@ Retorna:
 */
 char* obtainMTZ(char* file)
 {
-
 	FILE * fp;
 	char * line = NULL;
 	size_t len = 0;
@@ -190,28 +214,24 @@ char* obtainMTZ(char* file)
 	}
 	else{
 
+			while ((read = getline(&line, &len, fp)) !=-1)
+				{
+					linesize = strlen(line)+1;
+					if(linesize >2)
+					{
+						buffer = (char*) realloc ( buffer , (sizeof(char)*linesize*counter)); //al buffer asignar la memoria.
+						strcat(buffer, line);
+						counter++;
+					}
+				}
 
-		while ((read = getline(&line, &len, fp)) !=-1) {
+				fclose(fp);
 
-			linesize = strlen(line)+1;
-			if(linesize >2)
-			{
-				buffer = (char*) realloc ( buffer , (sizeof(char)*linesize*counter)); //al buffer asignar la memoria.
-				strcat(buffer, line);
-
-				counter++;
-			}
-
-		}
-
-
-		fclose(fp);
-
-		if (line)
-			free(line);
+				if (line)
+					free(line);
 
 		return buffer;
-	}
+		}
 }
 
 /*
@@ -222,10 +242,9 @@ Recibe:
 Retorna:
 */
 
-int askForWork(int sd){
-
-		enviar_mensaje(sd,SOLICITUD_TRABAJO,"Estoy listo para trabajar");
-
+int askForWork(int sd)
+{
+	enviar_mensaje(sd,SOLICITUD_TRABAJO,"Estoy listo para trabajar");
 }
 
 /*
@@ -260,17 +279,14 @@ char** split_delim (char* string,  char*  delim)
 	{
 		if(*s_temp==*delim)
 			count_fila++;
-		
+
 		s_temp++;
 	}
-	
-	
-	//Reservo la memoria para los vectores
 
+	//Reservo la memoria para los vectores
 	result = malloc (sizeof(char) * count_fila + strlen(string)*3);
 
 	//ahora estraigo cada cadena y la guardo en el vector resultado
-
 	count_fila=0;
 
 	fila_aux_temp = strtok(string, delim);
@@ -281,15 +297,12 @@ char** split_delim (char* string,  char*  delim)
 		{
 				*(result + count_fila ) = strdup(fila_aux_temp);
 				count_fila++;
-
-		}
+			}
 
 		fila_aux_temp = strtok(0, delim);
 	}
 
-
 	return result;
-
 }
 /*
 FUNCION
@@ -323,9 +336,9 @@ char* solverOperation (char *values, int op)
 	int num_elem = 0;
 	while (*(elements_m1 + num_elem) != NULL)
 	{
-		num_elem++;		
+		num_elem++;
 	}
-	
+
 	while (*(elements_m1 + count) != NULL)
 	{
 
@@ -336,7 +349,7 @@ char* solverOperation (char *values, int op)
 		if(op == ASIGNACION_TRABAJO_RESTA)
 			value  = atof(*(elements_m1 + count)) - atof(*(elements_m2 + count));
 
-		//creo la cadeja con el elemnto resultado
+		//creo la cadena con el elemnto resultado
 		if(count == (num_elem-1))
 			sprintf(element_result, "%.2f" , value);
 		else
@@ -347,15 +360,11 @@ char* solverOperation (char *values, int op)
 		result = (char * ) realloc (result, size );
 		//concateno los valores
 		printf("FILA %i  :A %s  +- B %s = %f \n",  count ,*(elements_m1 + count),*(elements_m2 + count),value);
-		
-		
-		
+
 		strcat(result,element_result);
-		
-		
+
 		count++;
 	}
 		printf ("resultado: %s \n",result);
 		return result;
-
 }
