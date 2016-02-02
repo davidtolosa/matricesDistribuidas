@@ -22,10 +22,10 @@ En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
 #define SOLICITUD_WORKER 102
 
 //....................................................
-//Codigo del tipo 20X - OPERACIONES
+//Codigo del tipo 20X - OPERACIONES CLIENTE/WORKER
 #define OPERACION_SUMA 201
 #define OPERACION_RESTA 202
-
+#define RESULTADO_MATRICES 204
 //....................................................
 //Codigo del tipo 30X - WORKER
 #define SOLICITUD_TRABAJO 301

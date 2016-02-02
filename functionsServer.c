@@ -225,6 +225,13 @@ int createOperation(char *buffer, int id_cli, int id_ope)
 	}
 
 }
+/*
+FUNCION
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
+*/
 
 int getSendWork(int sdc,int *id_suboper)
 {
@@ -298,6 +305,13 @@ int getSendWork(int sdc,int *id_suboper)
       return 0;
     }
 }
+/*
+FUNCION
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
+*/
 
 int saveResult(char *resultado, int id_suboperacion)
 {
@@ -320,6 +334,13 @@ int saveResult(char *resultado, int id_suboperacion)
     return 1;
     }
 }
+/*
+FUNCION
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
+*/
 
 int setWorkerOperation(int id_worker,int id_suboperacion)
 {
@@ -342,15 +363,58 @@ int setWorkerOperation(int id_worker,int id_suboperacion)
     return 1;
     }
 }
+/*
+FUNCION
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
+*/
 
 char* checkEndOperation(int id_cliente){
 
   sqlite3_stmt *stmt;
   char query[256];
   int retval;
+  
+  char* resultado = 0;
+  int size = 0;
 
   sqlite3 *handle =db_openDB(SQLITE_OPEN_READONLY);
 
-  sprintf(query,"SELECT id_cliente,fila,resultado FROM operaciones WHERE NOT EXISTS (SELECT * FROM operaciones WHERE id_cliente=%i AND resultado ISNULL) AND id_cliente=%i",id_cliente,id_cliente);
+  sprintf(query,"SELECT id_cliente,fila,resultado FROM operaciones WHERE NOT EXISTS (SELECT * FROM operaciones WHERE id_cliente=%i AND resultado ISNULL) AND id_cliente=%i ORDER BY fila ASC",id_cliente,id_cliente);
 
+  if( (retval = db_selectDB(handle, query, &stmt)) != SQLITE_ERROR)
+	{
+		while((retval = db_fetchDB(stmt)) == SQLITE_ROW )
+		{
+			size+= sizeof(char)* (strlen ( sqlite3_column_text(stmt,2)+2))*2;
+			resultado = realloc (resultado , size);
+			
+			strcat(resultado , sqlite3_column_text(stmt,2));
+			strcat(resultado , "\n");
+							
+		}
+		
+		if( retval != SQLITE_DONE ) {
+			printf("ERROR : %i \n",retval);
+			sqlite3_finalize(stmt);
+			db_closeDB(handle);
+			printf("Ocurrio un error con la BD. \n");
+		
+		
+		}
+		
+		return resultado;
+		
+	}
+  else
+	  {
+		  sqlite3_finalize(stmt);
+		  db_closeDB(handle);
+		  printf("Ocurrio un error con la BD. \n");
+		  return resultado;	
+	  }
+  
+  
 }

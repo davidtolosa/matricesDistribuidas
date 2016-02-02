@@ -22,7 +22,7 @@ void showHelpClient()
   printf("HELP Ayuda\n");
   printf("SALIR - Sale del programa\n");
   printf("\n");
-  printf("Los resultados seran devueltos en resultado.mtz\n\n");
+  printf("\n\nLos resultados seran devueltos en resultado.mtz\n\n");
  }
 
 /*
@@ -367,4 +367,24 @@ char* solverOperation (char *values, int op)
 	}
 		printf ("resultado: %s \n",result);
 		return result;
+}
+
+int saveResult(char* result)
+{
+	FILE * fp;
+	
+	
+	fp = fopen("./resultado.mtz", "w+");
+	
+	if (fp == NULL)
+	{
+		printf("Archivo inexistente o invalido\n");
+		return -1;
+	}
+	else{
+			fputs(result,fp);
+			return 1;
+	}
+	
+	
 }

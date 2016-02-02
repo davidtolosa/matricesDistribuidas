@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <signal.h>
+#include <pthread.h>
 #include "functionsClient.h"
 #include "protocoloMTZ.h"
 
@@ -18,6 +19,7 @@ void slot_closeMTZ ( int signal)
 	signalClose=1;
 	exit(signal);
 }
+
 
 int main(int argc, char *argv[]) {
 
@@ -34,6 +36,8 @@ int main(int argc, char *argv[]) {
 	struct sockaddr_in cliente;
 	struct hostent *h;
 	char *datos = NULL;
+	
+	pthread_t charger;
 
 	if (argc < 3) {
 		//printf("Debe ejecutar %s (nombre de host)\n",argv[0]);
@@ -101,20 +105,23 @@ int main(int argc, char *argv[]) {
 					{
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-
+						/*Una vez que el worker se encuentra registrado en el servidor*/
+						/*este pregunta si hay tareas para realizar.*/
 						askForWork(sd);
 
 						break;
 					}
 				case ACK_OPERACION:
 					{
-						printf("Server say: %s\n", mjs->body.mensage);
+						/*El server recibio las matrices y esta operando con ellas*/
+						printf("\n Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
 
 						break;
 					}
 				case ACK_OPERACION_WORKER:
 					{
+						
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
 						askForWork(sd);
@@ -126,8 +133,6 @@ int main(int argc, char *argv[]) {
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
 
-						/*sleep(2);
-						askForWork(sd);*/
 						break;
 					}
 				case ASIGNACION_TRABAJO_SUMA:
@@ -139,6 +144,9 @@ int main(int argc, char *argv[]) {
 						resultado = solverOperation(mjs->body.mensage, ASIGNACION_TRABAJO_SUMA);
 
 						enviar_mensaje(sd , RESULTADO_TRABAJO, resultado);
+						
+						if(resultado)
+							free(resultado);
 
 						break;
 					}
@@ -151,7 +159,19 @@ int main(int argc, char *argv[]) {
 						resultado = solverOperation(mjs->body.mensage, ASIGNACION_TRABAJO_RESTA);
 
 						enviar_mensaje(sd , RESULTADO_TRABAJO, resultado);
-
+						
+						if(resultado)
+							free(resultado);
+						
+						break;
+					}
+				case RESULTADO_MATRICES:
+					{
+						printf("RESULTADO : \n %s\n", mjs->body.mensage);
+						printf("--------------------------------\n");
+						
+						saveResult(mjs->body.mensage);
+						
 						break;
 					}
 

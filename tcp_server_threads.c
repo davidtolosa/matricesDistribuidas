@@ -123,33 +123,51 @@ void *cliente ( void *arg ) {
 				}
 				case OPERACION_SUMA:
 					{
+						//El cliente envio las matrices con las que se debe operar
 						printf("Cliente say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
 
 
 						enviar_mensaje(sdc, ACK_OPERACION, "Operacion recibida aguarde por los resultados.\n");
 
-						// VENDRIA LA LOGICA PARSEAR LAS OPERACIONES
+						// Creo las operaciones a realizar
 						createOperation(mjs->body.mensage, sdc, OPERACION_SUMA);
 
 						//--------------------------------------------------
-
+						char* resultado = 0;
+						//dejo el thread consultando por los resultados
+						while((resultado =checkEndOperation(sdc))==NULL)
+							sleep(2);
+						
+						printf("\n\n\nRESULTADO: %s\n", resultado);
+						//cuando los encontro los envio al cliente,
+						enviar_mensaje(sdc, RESULTADO_MATRICES, resultado);
+						
+						free(resultado);
 						free(mjs);
 						break;
 					}
 				case OPERACION_RESTA:
 						{
+							//El cliente envio las matrices con las que se debe operar
 							printf("Cliente say: %s\n", mjs->body.mensage);
 							printf("--------------------------------\n");
 
 
 							enviar_mensaje(sdc, ACK_OPERACION, "Operacion recibida aguarde por los resultados.\n");
 
-							// VENDRIA LA LOGICA PARSEAR LAS OPERACIONES
+							// Creo las operaciones a realizar
 							createOperation(mjs->body.mensage, sdc, OPERACION_RESTA);
 
 							//--------------------------------------------------
-
+							char* resultado = 0;
+							//dejo el thread consultando por los resultados
+							while((resultado =checkEndOperation(sdc))==NULL)
+								sleep(2);
+							//cuando los encontro los envio al cliente,
+							enviar_mensaje(sdc, RESULTADO_MATRICES, resultado);
+							
+							free(resultado);
 							free(mjs);
 							break;
 						}
@@ -217,10 +235,6 @@ void *cliente ( void *arg ) {
 		}
 
 	}
-
-
-
-
 
 
 }
