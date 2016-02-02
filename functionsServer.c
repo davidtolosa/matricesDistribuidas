@@ -255,7 +255,7 @@ int getSendWork(int sdc,int *id_suboper)
         {
           printf("ENVIAR TRABAJO SUMA\n");
           enviar_mensaje(sdc,ASIGNACION_TRABAJO_SUMA,valores);
-		  
+
 		  sqlite3_finalize(stmt);
 		  db_closeDB(handle);
           break;
@@ -264,20 +264,23 @@ int getSendWork(int sdc,int *id_suboper)
         {
           printf("ENVIAR TRABAJO RESTA\n");
           enviar_mensaje(sdc,ASIGNACION_TRABAJO_RESTA,valores);
-		  
+
 		  sqlite3_finalize(stmt);
 		  db_closeDB(handle);
-		  
+
           break;
         }
         default:
         {
 			sqlite3_finalize(stmt);
-			db_closeDB(handle);	
-			
+			db_closeDB(handle);
+
 			break;
         }
       }
+
+      //ACTUALIZO QUE WORKER ESTA RELIZANDO LA OPERACION
+      setWorkerOperation(sdc,id_suboperacion);
 
       *id_suboper = id_suboperacion;
 
@@ -293,5 +296,49 @@ int getSendWork(int sdc,int *id_suboper)
       enviar_mensaje(sdc, SIN_TRABAJOS, "Aun no tengo Trabajos");
 
       return 0;
+    }
+}
+
+int saveResult(char *resultado, int id_suboperacion)
+{
+  sqlite3 *handler;
+  handler = db_openDB(SQLITE_OPEN_READWRITE);
+  char query[256];
+
+  sprintf(query, "UPDATE operaciones SET resultado='%s' WHERE id_suboperacion=%i",resultado,id_suboperacion);
+
+  if( db_insert_update_delete(handler, query) != SQLITE_OK )
+  {
+    printf("Error al guardar el resultado\n");
+    db_closeDB(handler); // cierro la conexion
+    return 0;
+    }
+  else
+    {
+    printf("Resultado guardado\n");
+    db_closeDB(handler); // cierro la conexion
+    return 1;
+    }
+}
+
+int setWorkerOperation(int id_worker,int id_suboperacion)
+{
+  sqlite3 *handler;
+  handler = db_openDB(SQLITE_OPEN_READWRITE);
+  char query[256];
+
+  sprintf(query, "UPDATE operaciones SET id_worker=%i WHERE id_suboperacion=%i",id_worker,id_suboperacion);
+
+  if( db_insert_update_delete(handler, query) != SQLITE_OK )
+  {
+    printf("Error al guardar el worker\n");
+    db_closeDB(handler); // cierro la conexion
+    return 0;
+    }
+  else
+    {
+    printf("Worker guardado\n");
+    db_closeDB(handler); // cierro la conexion
+    return 1;
     }
 }

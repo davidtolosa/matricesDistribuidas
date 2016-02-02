@@ -152,15 +152,13 @@ void *cliente ( void *arg ) {
 				case RESULTADO_TRABAJO:
 					{
 						printf("Worker dice: Resultado del trabajo - %s\n", mjs->body.mensage);
-						
-						//Falta almacenar el trabajo
-						
-						
-						
+
+						saveResult(mjs->body.mensage,id_suboper_worker);
+
 						//-------------
 						//envio el ack para que el worker cambie de estado y vuelta a solicitar trabajos.
 						enviar_mensaje(sdc, ACK_OPERACION_WORKER, "Operacion recibida aguarde mas trabajos.\n");
-						
+
 						break;
 					}
 			default:
