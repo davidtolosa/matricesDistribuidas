@@ -137,7 +137,15 @@ int main(int argc, char *argv[]) {
 					{
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-
+						
+						char* resultado = NULL;
+						resultado = solverOperation(mjs->body.mensage, ASIGNACION_TRABAJO_SUMA);
+						
+						enviar_mensaje(sd , RESULTADO_TRABAJO, resultado);
+						
+				
+						
+						
 						break;
 					}
 				case ASIGNACION_TRABAJO_RESTA:

@@ -250,22 +250,32 @@ int getSendWork(int sdc,int *id_suboper)
 
       printf("Trabajo Obtenido para el Worker:\n ID SUBOPERACION:%i TIPO:%i VALORES:%s\n",id_suboperacion,tipo_operacion,valores);
 
-      switch (id_suboperacion) {
-        case 201:
+      switch (tipo_operacion) {
+        case OPERACION_SUMA:
         {
-          printf("ENVIAR TRABAJO SUMA");
+          printf("ENVIAR TRABAJO SUMA\n");
           enviar_mensaje(sdc,ASIGNACION_TRABAJO_SUMA,valores);
+		  
+		  sqlite3_finalize(stmt);
+		  db_closeDB(handle);
           break;
         }
-        case 202:
+        case OPERACION_RESTA:
         {
-          printf("ENVIAR TRABAJO RESTA");
+          printf("ENVIAR TRABAJO RESTA\n");
           enviar_mensaje(sdc,ASIGNACION_TRABAJO_RESTA,valores);
+		  
+		  sqlite3_finalize(stmt);
+		  db_closeDB(handle);
+		  
           break;
         }
         default:
         {
-          break;
+			sqlite3_finalize(stmt);
+			db_closeDB(handle);	
+			
+			break;
         }
       }
 
@@ -274,7 +284,7 @@ int getSendWork(int sdc,int *id_suboper)
       return 1;
     } else {
 
-	    sqlite3_finalize(stmt);
+	  sqlite3_finalize(stmt);
       db_closeDB(handle);
 
 	    //si no hay trabajos respondo con un mensaje informando que no hay.

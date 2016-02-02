@@ -14,3 +14,7 @@ char* createBuffer(char* M1, char* M2);
 char* obtainMTZ(char* file);
 
 int askForWork(int sd);
+
+char** split_delim (char* string,  char* delim);
+
+char* solverOperation (char *values, int op);

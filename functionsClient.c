@@ -214,8 +214,132 @@ char* obtainMTZ(char* file)
 	}
 }
 
+/*
+FUNCION
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
+*/
+
 int askForWork(int sd){
 
 		enviar_mensaje(sd,SOLICITUD_TRABAJO,"Estoy listo para trabajar");
 
+}
+
+/*
+FUNCION
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
+*/
+
+char** split_delim (char* string,  char* delim)
+{
+	char** result =0;
+	
+	char* s_temp=0;
+	
+	char* fila_aux=0;
+	char* fila_aux_temp=0;
+	int count_fila=0;
+	
+	s_temp = strdup(string);
+	//Cuento cuantos delimitadores tengo
+	fila_aux = strtok(s_temp, delim);
+	while(fila_aux != NULL)
+	{
+		if ( strlen(fila_aux) > 0)
+			count_fila++;
+		
+		fila_aux = strtok(0,delim);
+	}
+	
+	//Reservo la memoria para los vectores
+	
+	result = malloc (sizeof(char) * count_fila + strlen(string));
+	
+	//ahora estraigo cada cadena y la guardo en el vector resultado
+	
+	count_fila=0;
+	
+	fila_aux_temp = strtok(string, delim);
+	
+	while(fila_aux_temp != NULL)
+	{
+		if ( strlen(fila_aux_temp) > 0)
+		{
+			
+			*(result + count_fila ) = strdup(fila_aux_temp);
+			count_fila++;
+		}
+		
+		fila_aux_temp = strtok(0, delim);
+	}
+	
+	
+	return result;
+	
+}
+/*
+FUNCION
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
+*/
+
+char* solverOperation (char *values, int op)
+{
+	char* vec1 = strtok(values,";");
+	char* vec2 = strtok(NULL,";");
+	
+	printf("VEC 1 : %s \n", vec1);
+	printf("VEC 2 : %s \n", vec2);
+	
+	char** elements_m1 =NULL;
+	char** elements_m2 =NULL;
+	
+	char * result = NULL;
+	char element_result[256];
+	
+	int count = 0;
+	//obtengo las filas de las matrices
+	printf("SIN SEGMENT FAULT \n");
+	elements_m1 = split_delim(vec1 , ",");
+	printf("SIN SEGMENT FAULT \n");
+	elements_m2 = split_delim(vec2 , ",");
+	printf("SIN SEGMENT FAULT \n");
+	float value = 0;
+	int size = 1;
+	
+	while(*(elements_m1 + count) != NULL)
+	{
+		//convierto 
+		fgetc(stdin);
+		printf("SIN SEGMENT FAULT %i\n",count);
+		if(op == ASIGNACION_TRABAJO_SUMA)
+			value  = atof(*(elements_m1 + count)) + atof(*(elements_m2 + count));
+		
+		if(op == ASIGNACION_TRABAJO_RESTA)
+			value  = atof(*(elements_m1 + count)) - atof(*(elements_m2 + count));
+		
+		//creo la cadeja con el elemnto resultado
+		sprintf(element_result, "%.2f," , value);
+		//voy calculando el nuevo tamaño del vector resultado
+		size += sizeof(char) * (strlen(element_result)+1);
+		//solicito mas memoria para el resultado		
+		result = (char * ) realloc (result, size );
+		//concateno los valores
+		strcat(result,element_result);
+		printf("SIN SEGMENT FAULT %i - %f\n",count,value);
+		printf("RESULTADO %s\n",result);
+		count++;
+	}
+	
+
+		return result;
+	
 }

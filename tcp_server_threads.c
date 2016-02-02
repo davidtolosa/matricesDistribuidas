@@ -149,6 +149,14 @@ void *cliente ( void *arg ) {
 
 						break;
 					}
+				case RESULTADO_TRABAJO:
+					{
+						printf("Worker dice: Resultado del trabajo - %s\n", mjs->body.mensage);
+						
+						
+						
+						break;
+					}
 			default:
 					{
 
