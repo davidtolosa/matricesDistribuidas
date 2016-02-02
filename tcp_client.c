@@ -91,8 +91,8 @@ int main(int argc, char *argv[]) {
 			{
 				case ACK_CLIENTE_REGISTER:
 					{
-						printf("Server say: %s\n", mjs->body.mensage);
-						printf("--------------------------------\n");
+						//printf("Server say: %s\n", mjs->body.mensage);
+						//printf("--------------------------------\n");
 
 						showHelpClient();
 
@@ -114,9 +114,12 @@ int main(int argc, char *argv[]) {
 				case ACK_OPERACION:
 					{
 						/*El server recibio las matrices y esta operando con ellas*/
-						printf("\n Server say: %s\n", mjs->body.mensage);
-						printf("--------------------------------\n");
-
+/*						printf("\n Server say: %s\n", mjs->body.mensage);*/
+/*						printf("--------------------------------\n");*/
+						
+						//Lanzo un thread para poder visualizar la barra de cargando
+						pthread_create ( &charger, NULL, progresBar, NULL );
+						
 						break;
 					}
 				case ACK_OPERACION_WORKER:
@@ -167,9 +170,20 @@ int main(int argc, char *argv[]) {
 					}
 				case RESULTADO_MATRICES:
 					{
+/*						Estas lineas sirven para detener la barra*/
+/*						que corre en un thread separado y la ultima linea*/
+/*						limpia el ultimo mensaje puesto.*/
+						pthread_cancel(charger);
+						printf("\033[A\033[K");
+						//-----------------------------------------------
+						
+						//Obtengo el resultado enviado por el server
+						
+						
 						printf("RESULTADO : \n %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
 						
+						//almaceno el resultado en un archivo.
 						saveResult(mjs->body.mensage);
 						
 						break;

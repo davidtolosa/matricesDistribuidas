@@ -10,7 +10,8 @@ Compilar SERVER
 
 Compilar CLIENTE
 
-	gcc -o ./build/cliente tcp_client.c protocoloMTZ.c  functionsClient.c
+	gcc -o ./build/cliente tcp_client.c protocoloMTZ.c  functionsClient.c -l pthread
+
 	
 	CORRERLO
 		./build/cliente localhost cliente

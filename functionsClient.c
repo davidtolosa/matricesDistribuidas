@@ -369,6 +369,13 @@ char* solverOperation (char *values, int op)
 		return result;
 }
 
+/*
+FUNCION
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
+*/
 int saveResult(char* result)
 {
 	FILE * fp;
@@ -386,5 +393,52 @@ int saveResult(char* result)
 			return 1;
 	}
 	
+	
+}
+
+/*
+FUNCION
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
+*/
+
+void *progresBar ( void *arg )
+{
+	
+	while(1)
+	{
+		
+		//system("clear");
+		printf("\033[A\033[K");		
+		printf ("Processing\n");
+		fflush(stdout);
+		sleep(1);
+		
+		//system("clear");
+		printf("\033[A\033[K");
+		printf ("Processing.\n");
+		fflush(stdout);
+		sleep(1);
+		printf("\033[A\033[K");
+		//system("clear");
+		printf ("Processing..\n");
+		fflush(stdout);
+		sleep(1);
+		printf("\033[A\033[K");
+		//system("clear");
+		printf ("Processing...\n");
+		fflush(stdout);
+		sleep(1);
+		//system("clear");
+		printf("\033[A\033[K");
+		printf ("Processing..\n");
+		fflush(stdout);
+		sleep(1);
+		//system("clear");
+		
+		
+	}
 	
 }
