@@ -342,3 +342,15 @@ int setWorkerOperation(int id_worker,int id_suboperacion)
     return 1;
     }
 }
+
+char* checkEndOperation(int id_cliente){
+
+  sqlite3_stmt *stmt;
+  char query[256];
+  int retval;
+
+  sqlite3 *handle =db_openDB(SQLITE_OPEN_READONLY);
+
+  sprintf(query,"SELECT id_cliente,fila,resultado FROM operaciones WHERE NOT EXISTS (SELECT * FROM operaciones WHERE id_cliente=%i AND resultado ISNULL) AND id_cliente=%i",id_cliente,id_cliente);
+
+}
