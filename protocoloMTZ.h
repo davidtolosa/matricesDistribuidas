@@ -13,6 +13,7 @@ En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
 #define ACK_CLIENTE_REGISTER 401
 #define ACK_WORKER_REGISTER 402
 #define ACK_OPERACION 403
+#define ACK_OPERACION_WORKER 404
 
 
 //....................................................

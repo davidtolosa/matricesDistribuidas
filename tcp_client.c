@@ -120,10 +120,16 @@ int main(int argc, char *argv[]) {
 					{
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-
+						
 						break;
 					}
-
+				case ACK_OPERACION_WORKER:
+					{
+						printf("Server say: %s\n", mjs->body.mensage);
+						printf("--------------------------------\n");
+						askForWork(sd);
+						break;
+					}
 				case SIN_TRABAJOS:
 					{
 						printf("Server say: %s\n", mjs->body.mensage);

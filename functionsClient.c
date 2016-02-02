@@ -251,7 +251,7 @@ char** split_delim (char* string,  char* delim)
 	fila_aux = strtok(s_temp, delim);
 	while(fila_aux != NULL)
 	{
-		if ( strlen(fila_aux) > 0)
+		if ( strlen(fila_aux) > 1)
 			count_fila++;
 		
 		fila_aux = strtok(0,delim);
@@ -271,9 +271,9 @@ char** split_delim (char* string,  char* delim)
 	{
 		if ( strlen(fila_aux_temp) > 0)
 		{
+				*(result + count_fila ) = strdup(fila_aux_temp);
+				count_fila++;
 			
-			*(result + count_fila ) = strdup(fila_aux_temp);
-			count_fila++;
 		}
 		
 		fila_aux_temp = strtok(0, delim);
@@ -307,19 +307,15 @@ char* solverOperation (char *values, int op)
 	
 	int count = 0;
 	//obtengo las filas de las matrices
-	printf("SIN SEGMENT FAULT \n");
 	elements_m1 = split_delim(vec1 , ",");
-	printf("SIN SEGMENT FAULT \n");
 	elements_m2 = split_delim(vec2 , ",");
-	printf("SIN SEGMENT FAULT \n");
 	float value = 0;
 	int size = 1;
 	
-	while(*(elements_m1 + count) != NULL)
+	while(((*(elements_m1 + count) != NULL)) || (*(elements_m1 + count) != NULL))
 	{
+		
 		//convierto 
-		fgetc(stdin);
-		printf("SIN SEGMENT FAULT %i\n",count);
 		if(op == ASIGNACION_TRABAJO_SUMA)
 			value  = atof(*(elements_m1 + count)) + atof(*(elements_m2 + count));
 		
@@ -334,12 +330,9 @@ char* solverOperation (char *values, int op)
 		result = (char * ) realloc (result, size );
 		//concateno los valores
 		strcat(result,element_result);
-		printf("SIN SEGMENT FAULT %i - %f\n",count,value);
-		printf("RESULTADO %s\n",result);
 		count++;
 	}
-	
-
+			
 		return result;
 	
 }
