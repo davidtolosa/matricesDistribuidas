@@ -236,7 +236,7 @@ Recibe:
 Retorna:
 */
 
-char** split_delim (char* string,  char* delim)
+char** split_delim (char* string,  char*  delim)
 {
 	char** result =0;
 
@@ -248,18 +248,26 @@ char** split_delim (char* string,  char* delim)
 
 	s_temp = strdup(string);
 	//Cuento cuantos delimitadores tengo
-	fila_aux = strtok(s_temp, delim);
-	while(fila_aux != NULL)
+/*	fila_aux = strtok(s_temp, delim);*/
+/*	while(fila_aux != NULL)*/
+/*	{*/
+/*		if ( strlen(fila_aux) > 1)*/
+/*			count_fila++;*/
+
+/*		fila_aux = strtok(0,delim);*/
+/*	}*/
+	while (*s_temp)
 	{
-		if ( strlen(fila_aux) > 1)
+		if(*s_temp==*delim)
 			count_fila++;
-
-		fila_aux = strtok(0,delim);
+		
+		s_temp++;
 	}
-
+	
+	
 	//Reservo la memoria para los vectores
 
-	result = malloc (sizeof(char) * count_fila + strlen(string));
+	result = malloc (sizeof(char) * count_fila + strlen(string)*3);
 
 	//ahora estraigo cada cadena y la guardo en el vector resultado
 
@@ -312,7 +320,13 @@ char* solverOperation (char *values, int op)
 	float value = 0;
 	int size = 1;
 
-	while(((*(elements_m1 + count) != NULL)) || (*(elements_m1 + count) != NULL))
+	int num_elem = 0;
+	while (*(elements_m1 + num_elem) != NULL)
+	{
+		num_elem++;		
+	}
+	
+	while (*(elements_m1 + count) != NULL)
 	{
 
 		//convierto
@@ -323,15 +337,25 @@ char* solverOperation (char *values, int op)
 			value  = atof(*(elements_m1 + count)) - atof(*(elements_m2 + count));
 
 		//creo la cadeja con el elemnto resultado
-		sprintf(element_result, "%.2f," , value);
+		if(count == (num_elem-1))
+			sprintf(element_result, "%.2f" , value);
+		else
+			sprintf(element_result, "%.2f," , value);
 		//voy calculando el nuevo tama�o del vector resultado
 		size += sizeof(char) * (strlen(element_result)+1);
 		//solicito mas memoria para el resultado
 		result = (char * ) realloc (result, size );
 		//concateno los valores
+		printf("FILA %i  :A %s  +- B %s = %f \n",  count ,*(elements_m1 + count),*(elements_m2 + count),value);
+		
+		
+		
 		strcat(result,element_result);
+		
+		
 		count++;
 	}
+		printf ("resultado: %s \n",result);
 		return result;
 
 }

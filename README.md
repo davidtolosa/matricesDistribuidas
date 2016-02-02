@@ -17,4 +17,5 @@ Compilar CLIENTE
 		./build/cliente localhost worker
 
 
+SUMA ./file/matrizA.mtz ./file/matrizB.mtz
 
