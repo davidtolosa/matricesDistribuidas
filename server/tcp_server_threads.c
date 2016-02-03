@@ -6,11 +6,11 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 #include <signal.h>
-#include "protocoloMTZ.h"
 #include <sqlite3.h>
-#include "DBManager.h"
+#include "../protocol/protocoloMTZ.h"
+#include "../db/DBManager.h"
 #include "funtionsServer.h"
-#include <signal.h>
+
 // COMPILAR: gcc -o ./build/server tcp_server_threads.c protocoloMTZ.c DBManager.c -l pthread -l sqlite3
 
 int signalClose;
@@ -138,11 +138,11 @@ void *cliente ( void *arg ) {
 						//dejo el thread consultando por los resultados
 						while((resultado =checkEndOperation(sdc))==NULL)
 							sleep(2);
-						
+
 						printf("\n\n\nRESULTADO: %s\n", resultado);
 						//cuando los encontro los envio al cliente,
 						enviar_mensaje(sdc, RESULTADO_MATRICES, resultado);
-						
+
 						free(resultado);
 						free(mjs);
 						break;
@@ -166,7 +166,7 @@ void *cliente ( void *arg ) {
 								sleep(2);
 							//cuando los encontro los envio al cliente,
 							enviar_mensaje(sdc, RESULTADO_MATRICES, resultado);
-							
+
 							free(resultado);
 							free(mjs);
 							break;

@@ -9,7 +9,7 @@
 #include <signal.h>
 #include <pthread.h>
 #include "functionsClient.h"
-#include "protocoloMTZ.h"
+#include "../protocol/protocoloMTZ.h"
 
 int signalClose;
 
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 	struct sockaddr_in cliente;
 	struct hostent *h;
 	char *datos = NULL;
-	
+
 	pthread_t charger;
 
 	if (argc < 3) {
@@ -116,15 +116,15 @@ int main(int argc, char *argv[]) {
 						/*El server recibio las matrices y esta operando con ellas*/
 /*						printf("\n Server say: %s\n", mjs->body.mensage);*/
 /*						printf("--------------------------------\n");*/
-						
+
 						//Lanzo un thread para poder visualizar la barra de cargando
 						pthread_create ( &charger, NULL, progresBar, NULL );
-						
+
 						break;
 					}
 				case ACK_OPERACION_WORKER:
 					{
-						
+
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
 						askForWork(sd);
@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
 						resultado = solverOperation(mjs->body.mensage, ASIGNACION_TRABAJO_SUMA);
 
 						enviar_mensaje(sd , RESULTADO_TRABAJO, resultado);
-						
+
 						if(resultado)
 							free(resultado);
 
@@ -162,10 +162,10 @@ int main(int argc, char *argv[]) {
 						resultado = solverOperation(mjs->body.mensage, ASIGNACION_TRABAJO_RESTA);
 
 						enviar_mensaje(sd , RESULTADO_TRABAJO, resultado);
-						
+
 						if(resultado)
 							free(resultado);
-						
+
 						break;
 					}
 				case RESULTADO_MATRICES:
@@ -176,16 +176,16 @@ int main(int argc, char *argv[]) {
 						pthread_cancel(charger);
 						printf("\033[A\033[K");
 						//-----------------------------------------------
-						
+
 						//Obtengo el resultado enviado por el server
-						
-						
+
+
 						printf("RESULTADO : \n %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-						
+
 						//almaceno el resultado en un archivo.
 						saveResult(mjs->body.mensage);
-						
+
 						break;
 					}
 

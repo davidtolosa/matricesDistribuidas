@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sqlite3.h>
-#include "DBManager.h"
+#include "../db/DBManager.h"
 
 //DEFINICIONES DE LAS FUNCIONES EL SERVER
 //.....................................................

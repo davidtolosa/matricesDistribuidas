@@ -1,5 +1,5 @@
 #include "functionsClient.h"
-#include "protocoloMTZ.h"
+#include "../protocol/protocoloMTZ.h"
 
 /*
 FUNCION
@@ -379,10 +379,10 @@ Retorna:
 int saveResult(char* result)
 {
 	FILE * fp;
-	
-	
+
+
 	fp = fopen("./resultado.mtz", "w+");
-	
+
 	if (fp == NULL)
 	{
 		printf("Archivo inexistente o invalido\n");
@@ -392,8 +392,8 @@ int saveResult(char* result)
 			fputs(result,fp);
 			return 1;
 	}
-	
-	
+
+
 }
 
 /*
@@ -406,16 +406,16 @@ Retorna:
 
 void *progresBar ( void *arg )
 {
-	
+
 	while(1)
 	{
-		
+
 		//system("clear");
-		printf("\033[A\033[K");		
+		printf("\033[A\033[K");
 		printf ("Processing\n");
 		fflush(stdout);
 		sleep(1);
-		
+
 		//system("clear");
 		printf("\033[A\033[K");
 		printf ("Processing.\n");
@@ -437,8 +437,8 @@ void *progresBar ( void *arg )
 		fflush(stdout);
 		sleep(1);
 		//system("clear");
-		
-		
+
+
 	}
-	
+
 }

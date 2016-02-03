@@ -1,5 +1,5 @@
 #include "funtionsServer.h"
-#include "protocoloMTZ.h"
+#include "../protocol/protocoloMTZ.h"
 
 /*
 FUNCION
@@ -376,7 +376,7 @@ char* checkEndOperation(int id_cliente){
   sqlite3_stmt *stmt;
   char query[256];
   int retval;
-  
+
   char* resultado = 0;
   int size = 0;
 
@@ -390,31 +390,31 @@ char* checkEndOperation(int id_cliente){
 		{
 			size+= sizeof(char)* (strlen ( sqlite3_column_text(stmt,2)+2))*2;
 			resultado = realloc (resultado , size);
-			
+
 			strcat(resultado , sqlite3_column_text(stmt,2));
 			strcat(resultado , "\n");
-							
+
 		}
-		
+
 		if( retval != SQLITE_DONE ) {
 			printf("ERROR : %i \n",retval);
 			sqlite3_finalize(stmt);
 			db_closeDB(handle);
 			printf("Ocurrio un error con la BD. \n");
-		
-		
+
+
 		}
-		
+
 		return resultado;
-		
+
 	}
   else
 	  {
 		  sqlite3_finalize(stmt);
 		  db_closeDB(handle);
 		  printf("Ocurrio un error con la BD. \n");
-		  return resultado;	
+		  return resultado;
 	  }
-  
-  
+
+
 }
