@@ -1,7 +1,8 @@
 # matricesDistribuidas
 
-Compilar SERVER
+SERVER
 
+	COMPILAR
 	gcc -o ../build/server tcp_server_threads.c ../protocol/protocoloMTZ.c functionsServer.c ../db/DBManager.c -l pthread -l sqlite3
 
 	
@@ -9,8 +10,9 @@ Compilar SERVER
 		./build/server localhost
 
 
-Compilar CLIENTE
-
+CLIENTE
+	
+	COMPILAR
 	gcc -o ../build/cliente tcp_client.c functionsClient.c ../protocol/protocoloMTZ.c -l pthread
 
 	
@@ -20,4 +22,4 @@ Compilar CLIENTE
 
 
 SUMA ./file/matrizA.mtz ./file/matrizB.mtz
-
+RESTA ./file/matrizA.mtz ./file/matrizB.mtz
