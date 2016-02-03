@@ -18,13 +18,17 @@ int newClient(int sdc){
 
   if( db_insert_update_delete(handler, query) != SQLITE_OK )
   {
+    #ifdef DEBUG
     printf("Error al cargar el cliente\n");
+    #endif
     db_closeDB(handler); // cierro la conexion
     return 0;
     }
   else
     {
+    #ifdef DEBUG
     printf("Cliente cargado\n");
+    #endif
     db_closeDB(handler); // cierro la conexion
     return 1;
     }
@@ -42,7 +46,9 @@ Retorna:
 int deleteClient(int sdc){
 
   sqlite3 *handler =NULL;
+  #ifdef DEBUG
   printf("Abro la base de datos\n");
+  #endif
   handler = db_openDB(SQLITE_OPEN_READWRITE);
   char query[256];
 
@@ -51,14 +57,18 @@ int deleteClient(int sdc){
 	{
 	  if( db_insert_update_delete(handler, query) != SQLITE_OK )
 	  {
+    #ifdef DEBUG
 		printf("Error al eliminar el cliente\n");
-		db_closeDB(handler); // cierro la conexion
+    #endif
+    db_closeDB(handler); // cierro la conexion
 		return 0;
 		}
 	  else
 		{
+    #ifdef DEBUG
 		printf("Cliente eliminado\n");
-		db_closeDB(handler); // cierro la conexion
+    #endif
+    db_closeDB(handler); // cierro la conexion
 		return 1;
 		}
 	}
@@ -86,13 +96,17 @@ int newWorker(int sdc){
 
   if( db_insert_update_delete(handler, query) != SQLITE_OK )
   {
+    #ifdef DEBUG
     printf("Error al cargar el worker\n");
+    #endif
     db_closeDB(handler); // cierro la conexion
     return 0;
     }
   else
     {
+    #ifdef DEBUG
     printf("Worker cargado\n");
+    #endif
     db_closeDB(handler); // cierro la conexion
     return 1;
     }
@@ -115,14 +129,18 @@ int deleteWorker(int sdc){
 	sprintf(query, "DELETE FROM worker WHERE id_worker=%i;",sdc);
 		if( db_insert_update_delete(handler, query) != SQLITE_OK )
 		{
+      #ifdef DEBUG
 			printf("Error al eliminar el worker\n");
-			db_closeDB(handler); // cierro la conexion
+      #endif
+      db_closeDB(handler); // cierro la conexion
 	    return 0;
 	    }
 		else
 			{
+      #ifdef DEBUG
 			printf("Worker eliminado\n");
-			db_closeDB(handler); // cierro la conexion
+      #endif
+      db_closeDB(handler); // cierro la conexion
 			return 1;
 	    }
 }
@@ -170,17 +188,13 @@ char** split_delim (char* string,  char* delim)
 	{
 		if ( strlen(fila_aux_temp) > 2)
 		{
-
 			*(result + count_fila ) = strdup(fila_aux_temp);
 			count_fila++;
 		}
 
 		fila_aux_temp = strtok(0, delim);
 	}
-
-
 	return result;
-
 }
 
 /*
@@ -193,8 +207,7 @@ Retorna:
 
 int createOperation(char *buffer, int id_cli, int id_ope)
 {
-
-	int i=0;
+  int i=0;
 //variables para la BD
 	sqlite3 *handler;
 	handler = db_openDB(SQLITE_OPEN_READWRITE);
@@ -209,21 +222,21 @@ int createOperation(char *buffer, int id_cli, int id_ope)
 	filas_m1 = split_delim(mat1 , "\n");
 	filas_m2 = split_delim(mat2 , "\n");
 
-
-	while(*(filas_m1 + i) != NULL)
+  while(*(filas_m1 + i) != NULL)
 	{
 		sprintf(query, "INSERT INTO operaciones (tipo_operacion, valores,fila,id_cliente) VALUES (%i,'%s;%s',%i,%i);",id_ope,*(filas_m1 + i),*(filas_m2 + i),i,id_cli);
 
 		if( db_insert_update_delete(handler, query) != SQLITE_OK )
 		{
+      #ifdef DEBUG
 			printf("No se pudo cargar la operacion\n");
-			db_closeDB(handler); // cierro la conexion
+      #endif
+      db_closeDB(handler); // cierro la conexion
 			return 0;
 		}
 
 		i++;
 	}
-
 }
 /*
 FUNCION
@@ -255,34 +268,40 @@ int getSendWork(int sdc,int *id_suboper)
       valores = (char *) malloc(strlen((const char*) sqlite3_column_text(stmt,2))+1);
       strcpy(valores, (const char*) sqlite3_column_text(stmt,2));
 
+      #ifdef DEBUG
       printf("Trabajo Obtenido para el Worker:\n ID SUBOPERACION:%i TIPO:%i VALORES:%s\n",id_suboperacion,tipo_operacion,valores);
+      #endif
 
       switch (tipo_operacion) {
         case OPERACION_SUMA:
         {
+          #ifdef DEBUG
           printf("ENVIAR TRABAJO SUMA\n");
+          #endif
           enviar_mensaje(sdc,ASIGNACION_TRABAJO_SUMA,valores);
 
-		  sqlite3_finalize(stmt);
-		  db_closeDB(handle);
+		      sqlite3_finalize(stmt);
+		      db_closeDB(handle);
           break;
         }
         case OPERACION_RESTA:
         {
+          #ifdef DEBUG
           printf("ENVIAR TRABAJO RESTA\n");
+          #endif
           enviar_mensaje(sdc,ASIGNACION_TRABAJO_RESTA,valores);
 
-		  sqlite3_finalize(stmt);
-		  db_closeDB(handle);
+		      sqlite3_finalize(stmt);
+		      db_closeDB(handle);
 
           break;
         }
         default:
         {
-			sqlite3_finalize(stmt);
-			db_closeDB(handle);
+			    sqlite3_finalize(stmt);
+			    db_closeDB(handle);
 
-			break;
+			    break;
         }
       }
 
@@ -298,8 +317,9 @@ int getSendWork(int sdc,int *id_suboper)
       db_closeDB(handle);
 
 	    //si no hay trabajos respondo con un mensaje informando que no hay.
+      #ifdef DEBUG
       printf("No hay trabajo para el worker%i\n",sdc);
-
+      #endif
       enviar_mensaje(sdc, SIN_TRABAJOS, "Aun no tengo Trabajos");
 
       return 0;
@@ -323,13 +343,17 @@ int saveResult(char *resultado, int id_suboperacion)
 
   if( db_insert_update_delete(handler, query) != SQLITE_OK )
   {
+    #ifdef DEBUG
     printf("Error al guardar el resultado\n");
+    #endif
     db_closeDB(handler); // cierro la conexion
     return 0;
     }
   else
     {
+    #ifdef DEBUG
     printf("Resultado guardado\n");
+    #endif
     db_closeDB(handler); // cierro la conexion
     return 1;
     }
@@ -352,13 +376,17 @@ int setWorkerOperation(int id_worker,int id_suboperacion)
 
   if( db_insert_update_delete(handler, query) != SQLITE_OK )
   {
+    #ifdef DEBUG
     printf("Error al guardar el worker\n");
+    #endif
     db_closeDB(handler); // cierro la conexion
     return 0;
     }
   else
     {
+    #ifdef DEBUG
     printf("Worker guardado\n");
+    #endif
     db_closeDB(handler); // cierro la conexion
     return 1;
     }
@@ -393,28 +421,27 @@ char* checkEndOperation(int id_cliente){
 
 			strcat(resultado , sqlite3_column_text(stmt,2));
 			strcat(resultado , "\n");
-
-		}
+    }
 
 		if( retval != SQLITE_DONE ) {
+      #ifdef DEBUG
 			printf("ERROR : %i \n",retval);
-			sqlite3_finalize(stmt);
+      #endif
+      sqlite3_finalize(stmt);
 			db_closeDB(handle);
+      #ifdef DEBUG
 			printf("Ocurrio un error con la BD. \n");
-
-
-		}
-
-		return resultado;
-
-	}
+      #endif
+    }
+    return resultado;
+  }
   else
 	  {
 		  sqlite3_finalize(stmt);
 		  db_closeDB(handle);
+      #ifdef DEBUG
 		  printf("Ocurrio un error con la BD. \n");
-		  return resultado;
+      #endif
+      return resultado;
 	  }
-
-
 }

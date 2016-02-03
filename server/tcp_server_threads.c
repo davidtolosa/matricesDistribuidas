@@ -23,6 +23,14 @@ void slot_closeMTZ ( int signal)
 }
 
 void *cliente (void *);
+void *showServerInfo(void *arg);
+
+int clients;
+int workers;
+pthread_mutex_t mClient;
+pthread_cond_t cClient;
+pthread_mutex_t mWorker;
+pthread_cond_t cWorker;
 
 int main() {
 
@@ -36,6 +44,7 @@ int main() {
 	struct sockaddr_in sock_servidor;
 	struct sockaddr_in sock_cliente;
 	pthread_t tid;
+	pthread_t tid_info;
 
 	sock_servidor.sin_family = AF_INET;
 	sock_servidor.sin_port = htons (4444);
@@ -49,6 +58,16 @@ int main() {
 		}
 
 	initDB(); //Inicio la DB
+
+	clients=0;
+	workers=0;
+
+	pthread_mutex_init(&mClient, NULL);
+	pthread_cond_init(&cClient, NULL);
+	pthread_mutex_init(&mWorker, NULL);
+	pthread_cond_init(&cWorker, NULL);
+
+	pthread_create (&tid_info, NULL, showServerInfo, NULL);
 
 	listen ( sd , 5);
 
@@ -66,7 +85,7 @@ int main() {
 
 }
 
-void *cliente ( void *arg ) {
+void *cliente (void *arg) {
 
 	int sdc;
 	int n;
@@ -104,6 +123,11 @@ void *cliente ( void *arg ) {
 					newClient(sdc);
 					enviar_mensaje(sdc, ACK_CLIENTE_REGISTER, "Hola Cliente. Espero sus actividades\n");
 
+					pthread_mutex_lock (&mClient);
+					clients++;
+					pthread_cond_signal (&cClient);
+					pthread_mutex_unlock (&mClient);
+
 					free(mjs);
 					break;
 				}
@@ -117,6 +141,11 @@ void *cliente ( void *arg ) {
 					newWorker(sdc);
 
 					enviar_mensaje(sdc, ACK_WORKER_REGISTER, "Hola Worker\n");
+
+					pthread_mutex_lock (&mWorker);
+					workers++;
+					pthread_cond_signal (&cWorker);
+					pthread_mutex_unlock (&mWorker);
 
 					free(mjs);
 					break;
@@ -212,17 +241,38 @@ void *cliente ( void *arg ) {
 			switch (threadType) {
 			case SOLICITUD_CLIENTE:
 				{
-
 					if(deleteClient(sdc) ==1)
-						printf("---Cliente desconectado---\n");
+						{
+							printf("---Cliente desconectado---\n");
+
+							pthread_mutex_lock (&mClient);
+							clients--;
+							pthread_cond_signal (&cClient);
+							pthread_mutex_unlock (&mClient);
+
+						}
 					else
+						{
 						printf("ERROR BD\n");
+						}
+
 					break;
 				}
 			case SOLICITUD_WORKER:
 				{
-					deleteWorker(sdc);
-					printf("---Worker desconectado---\n");
+					if(deleteWorker(sdc)==1)
+					{
+						printf("---Worker desconectado---\n");
+
+						pthread_mutex_lock (&mClient);
+						workers--;
+						pthread_cond_signal (&cClient);
+						pthread_mutex_unlock (&mClient);
+					}
+					{
+					printf("ERROR BD\n");
+					}
+
 					break;
 				}
 			default:
@@ -230,11 +280,34 @@ void *cliente ( void *arg ) {
 			}
 			//Cuando se desconecta elimino Cliente/worker
 			close (sdc);
-
-
 		}
 
 	}
+}
+
+void *showServerInfo(void *arg){
+
+	printf("CREO EL THREAD INFO");
+  while (1) {
+
+		pthread_mutex_lock (&mClient);
+    pthread_mutex_lock (&mWorker);
+		pthread_cond_wait(&cClient,&mClient);
+    pthread_cond_wait(&cWorker,&mWorker);
+
+		system("clear");
+		printf("----------------------------------------------------------------------\n");
+    printf("-----------------------------Server MTZ-------------------------------\n");
+    printf("----------------------------------------------------------------------\n");
+    printf("\n");
+    printf("Clientes Conectados:%i\n\n",clients);
+    printf("Workers Conectados:%i\n",workers);
+		fflush(stdout);
+		sleep(1);
 
 
+		pthread_mutex_unlock (&mClient);
+    pthread_mutex_unlock (&mWorker);
+
+	  }
 }

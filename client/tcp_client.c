@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
 /*						printf("--------------------------------\n");*/
 
 						//Lanzo un thread para poder visualizar la barra de cargando
-						pthread_create ( &charger, NULL, progresBar, NULL );
+						pthread_create (&charger, NULL, progresBar, NULL);
 
 						break;
 					}
@@ -178,13 +178,14 @@ int main(int argc, char *argv[]) {
 						//-----------------------------------------------
 
 						//Obtengo el resultado enviado por el server
-
-
 						printf("RESULTADO : \n %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
 
 						//almaceno el resultado en un archivo.
 						saveResult(mjs->body.mensage);
+
+						if(showConsole(sd)<0)
+							n=0;
 
 						break;
 					}

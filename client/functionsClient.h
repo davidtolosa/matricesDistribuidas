@@ -6,19 +6,11 @@
 
 
 void showHelpClient();
-
 int showConsole(int sd);
-
 char* createBuffer(char* M1, char* M2);
-
 char* obtainMTZ(char* file);
-
 int askForWork(int sd);
-
 char** split_delim (char* string,  char* delim);
-
 char* solverOperation (char *values, int op);
-
 int saveResult(char* result);
-
-void *progresBar ( void *arg );
+void *progresBar (void *arg);

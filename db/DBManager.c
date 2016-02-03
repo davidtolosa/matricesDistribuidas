@@ -20,11 +20,16 @@ sqlite3* db_openDB(int flag){
 
 	if(retval!=SQLITE_OK)
 	{
-    printf("Error conexion '%s'.\n", sqlite3_errmsg(handle));
-    db_closeDB(handle);
+		#ifdef DEBUG
+		printf("Error conexion '%s'.\n", sqlite3_errmsg(handle));
+		#endif
+		db_closeDB(handle);
 	}
 	else
-	  { printf("Open database.\n");
+	  {
+		#ifdef DEBUG
+		printf("Open database.\n");
+		#endif
 		return handle;
 	  }
 }
@@ -53,17 +58,19 @@ Retorna: int
 
 int db_selectDB(sqlite3 *handle, char *query, sqlite3_stmt  **stmt)
 {
-
-  srand((unsigned)time(0));
+	srand((unsigned)time(0));
   int retval,i;
 
   retval = sqlite3_prepare_v2(handle, query, -1, stmt, 0);
 
   while (retval == SQLITE_BUSY) {
-	printf("--> BUSSY sqlite3_prepare_v2\n ");
-    retval = rand()%999999;
-    for(i=0; i<retval; i++);
-    retval = sqlite3_prepare_v2(handle, query, -1, stmt, 0);
+		#ifdef DEBUG
+		printf("--> BUSSY sqlite3_prepare_v2\n ");
+		#endif
+
+		retval = rand()%999999;
+  	for(i=0; i<retval; i++);
+  		retval = sqlite3_prepare_v2(handle, query, -1, stmt, 0);
   }
 
   return retval;
@@ -75,7 +82,9 @@ int db_fetchDB( sqlite3_stmt *stmt){
 
   retval = sqlite3_step(stmt);
   while (retval == SQLITE_BUSY) {
+		#ifdef DEBUG
     printf("--> BUSSY sqlite3_step\n ");
+		#endif
     retval = rand()%999999;
     for(i=0; i<retval; i++);
     retval = sqlite3_step(stmt);
@@ -106,8 +115,10 @@ int db_insert_update_delete(sqlite3 *handle, char *query){
     retval = sqlite3_exec(handle, query, 0, 0, 0);
     if (retval!= SQLITE_OK)
     {
+				#ifdef DEBUG
         printf("Error Operacion '%s'.\n",error);
-    }
+				#endif
+		}
 
   }
 
@@ -126,7 +137,7 @@ void initDB(){
 
   sqlite3 *handle;
   int retval;
-  char query[256]; //VERRRRRRRRRR
+  char query[256];
 
   handle = db_openDB(SQLITE_OPEN_READWRITE);
 

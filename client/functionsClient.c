@@ -380,7 +380,6 @@ int saveResult(char* result)
 {
 	FILE * fp;
 
-
 	fp = fopen("./resultado.mtz", "w+");
 
 	if (fp == NULL)
@@ -392,8 +391,6 @@ int saveResult(char* result)
 			fputs(result,fp);
 			return 1;
 	}
-
-
 }
 
 /*
@@ -403,16 +400,13 @@ Nombre :
 Recibe:
 Retorna:
 */
-
-void *progresBar ( void *arg )
+void *progresBar (void *arg)
 {
-
 	while(1)
 	{
-
 		//system("clear");
 		printf("\033[A\033[K");
-		printf ("Processing\n");
+		printf ("Processing");
 		fflush(stdout);
 		sleep(1);
 
@@ -437,8 +431,6 @@ void *progresBar ( void *arg )
 		fflush(stdout);
 		sleep(1);
 		//system("clear");
-
-
 	}
 
 }
