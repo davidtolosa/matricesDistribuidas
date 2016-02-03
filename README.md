@@ -22,4 +22,5 @@ CLIENTE
 
 
 SUMA ./file/matrizA.mtz ./file/matrizB.mtz
+
 RESTA ./file/matrizA.mtz ./file/matrizB.mtz
