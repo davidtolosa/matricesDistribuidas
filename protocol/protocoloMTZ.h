@@ -6,6 +6,7 @@ En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
 #include <stdlib.h>
 #include <string.h>
 #include <arpa/inet.h>
+#define DEBUG
 
 //CODIGOS DE LOS MENSAJES
 //....................................................
@@ -20,6 +21,7 @@ En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
 //codigos del tipo 10X - SOLICITUDES DE CONEXION.
 #define SOLICITUD_CLIENTE 101
 #define SOLICITUD_WORKER 102
+#define NO_WORKER_DISPONIBLES 103
 
 //....................................................
 //Codigo del tipo 20X - OPERACIONES CLIENTE/WORKER

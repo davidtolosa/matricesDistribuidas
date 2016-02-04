@@ -122,14 +122,22 @@ void *cliente (void *arg) {
 
 					threadType = SOLICITUD_CLIENTE;
 
-					//Cuando un cliente se conecta.
-					newClient(sdc);
-					enviar_mensaje(sdc, ACK_CLIENTE_REGISTER, "Hola Cliente. Espero sus actividades\n");
+					if(workers>0)
+					{
+						//Cuando un cliente se conecta.
+						newClient(sdc);
+						enviar_mensaje(sdc, ACK_CLIENTE_REGISTER, "Hola Cliente. Espero sus actividades\n");
 
-					pthread_mutex_lock (&mClient);
-					clients++;
-					pthread_cond_signal (&cClient);
-					pthread_mutex_unlock (&mClient);
+						pthread_mutex_lock (&mClient);
+						clients++;
+						pthread_cond_signal (&cClient);
+						pthread_mutex_unlock (&mClient);
+
+					}
+					else
+					{
+						enviar_mensaje(sdc, NO_WORKER_DISPONIBLES, "Hola Cliente. No hay workers disponibles, intente mas tarde.\n");
+					}
 
 					free(mjs);
 					break;
@@ -218,7 +226,7 @@ void *cliente (void *arg) {
 
 						getSendWork(sdc,&id_suboper_worker);
 						sleep(1);
-						
+
 
 						#ifdef DEBUG
 						printf("ID SUBOPERACION WORKER:%i\n",id_suboper_worker);

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <sqlite3.h>
 #include "../db/DBManager.h"
+#define DEBUG
 
 //DEFINICIONES DE LAS FUNCIONES EL SERVER
 //.....................................................
