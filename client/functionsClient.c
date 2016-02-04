@@ -405,32 +405,33 @@ void *progresBar (void *arg)
 	while(1)
 	{
 		//system("clear");
-		printf("\033[A\033[K");
-		printf ("Processing");
-		fflush(stdout);
-		sleep(1);
+ 		printf("\033[A\033[K");
+ 		printf ("Processing\n");
+ 		fflush(stdout);
+ 		sleep(1);
 
 		//system("clear");
-		printf("\033[A\033[K");
-		printf ("Processing.\n");
-		fflush(stdout);
+ 		printf("\033[A\033[K");
+ 		printf ("Processing.\n");
+ 		fflush(stdout);
+ 		sleep(1);
+ 		printf("\033[A\033[K");
+ 		//system("clear");
+ 		printf ("Processing..\n");
+ 		fflush(stdout);
+ 		sleep(1);
+ 		printf("\033[A\033[K");
+ 		//system("clear");
+ 		printf ("Processing...\n");
+ 		fflush(stdout);
+ 		sleep(1);
+ 		//system("clear");
+ 		printf("\033[A\033[K");
+ 		printf ("Processing..\n");
+ 		fflush(stdout);
 		sleep(1);
-		printf("\033[A\033[K");
-		//system("clear");
-		printf ("Processing..\n");
-		fflush(stdout);
-		sleep(1);
-		printf("\033[A\033[K");
-		//system("clear");
-		printf ("Processing...\n");
-		fflush(stdout);
-		sleep(1);
-		//system("clear");
-		printf("\033[A\033[K");
-		printf ("Processing..\n");
-		fflush(stdout);
-		sleep(1);
-		//system("clear");
+ 		//system("clear");
+
 	}
 
 }

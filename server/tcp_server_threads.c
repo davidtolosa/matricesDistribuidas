@@ -19,7 +19,6 @@ void slot_closeMTZ ( int signal)
 {
 	printf("Se ha precionado Ctrl-c \n");
 	signalClose=1;
-
 }
 
 void *cliente (void *);
@@ -59,6 +58,8 @@ int main() {
 
 	initDB(); //Inicio la DB
 
+	listen ( sd , 5);
+
 	clients=0;
 	workers=0;
 
@@ -68,8 +69,6 @@ int main() {
 	pthread_cond_init(&cWorker, NULL);
 
 	pthread_create (&tid_info, NULL, showServerInfo, NULL);
-
-	listen ( sd , 5);
 
 	while (1) {
 
@@ -97,8 +96,10 @@ void *cliente (void *arg) {
 
 	sdc = *( (int *) arg);
 
+	#ifdef DEBUG
 	printf("--------------------------------\n");
 	printf("Nuevo Cliente:%i \n",sdc);
+	#endif
 
 	n = 1;
 	while ( (n != 0)) {
@@ -114,8 +115,10 @@ void *cliente (void *arg) {
 			{
 				case SOLICITUD_CLIENTE:
 				{
+					#ifdef DEBUG
 					printf("Cliente say: %s\n", mjs->body.mensage);
 					printf("--------------------------------\n");
+					#endif
 
 					threadType = SOLICITUD_CLIENTE;
 
@@ -133,8 +136,11 @@ void *cliente (void *arg) {
 				}
 				case SOLICITUD_WORKER:
 				{
+					#ifdef DEBUG
 					printf("Cliente say: %s\n", mjs->body.mensage);
 					printf("--------------------------------\n");
+					#endif
+
 					threadType = SOLICITUD_WORKER;
 
 					//Cuando un Worker se conecta
@@ -153,9 +159,10 @@ void *cliente (void *arg) {
 				case OPERACION_SUMA:
 					{
 						//El cliente envio las matrices con las que se debe operar
+						#ifdef DEBUG
 						printf("Cliente say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-
+						#endif
 
 						enviar_mensaje(sdc, ACK_OPERACION, "Operacion recibida aguarde por los resultados.\n");
 
@@ -168,7 +175,9 @@ void *cliente (void *arg) {
 						while((resultado =checkEndOperation(sdc))==NULL)
 							sleep(2);
 
+						#ifdef DEBUG
 						printf("\n\n\nRESULTADO: %s\n", resultado);
+						#endif
 						//cuando los encontro los envio al cliente,
 						enviar_mensaje(sdc, RESULTADO_MATRICES, resultado);
 
@@ -179,9 +188,10 @@ void *cliente (void *arg) {
 				case OPERACION_RESTA:
 						{
 							//El cliente envio las matrices con las que se debe operar
+							#ifdef DEBUG
 							printf("Cliente say: %s\n", mjs->body.mensage);
 							printf("--------------------------------\n");
-
+							#endif
 
 							enviar_mensaje(sdc, ACK_OPERACION, "Operacion recibida aguarde por los resultados.\n");
 
@@ -202,19 +212,24 @@ void *cliente (void *arg) {
 						}
 				case SOLICITUD_TRABAJO:
 					{
+						#ifdef DEBUG
 						printf("Worker dice:%s\n", mjs->body.mensage);
+						#endif
 
 						while (getSendWork(sdc,&id_suboper_worker)!=1) {
 							sleep(2);
 						}
 
+						#ifdef DEBUG
 						printf("ID SUBOPERACION WORKER:%i\n",id_suboper_worker);
-
+						#endif
 						break;
 					}
 				case RESULTADO_TRABAJO:
 					{
+						#ifdef DEBUG
 						printf("Worker dice: Resultado del trabajo - %s\n", mjs->body.mensage);
+						#endif
 
 						saveResult(mjs->body.mensage,id_suboper_worker);
 
@@ -237,14 +252,17 @@ void *cliente (void *arg) {
 		{
 			n = 0;
 			free(mjs);
+			#ifdef DEBUG
 			printf("Me despido\n");
+			#endif
 			switch (threadType) {
 			case SOLICITUD_CLIENTE:
 				{
 					if(deleteClient(sdc) ==1)
 						{
+							#ifdef DEBUG
 							printf("---Cliente desconectado---\n");
-
+							#endif
 							pthread_mutex_lock (&mClient);
 							clients--;
 							pthread_cond_signal (&cClient);
@@ -253,7 +271,9 @@ void *cliente (void *arg) {
 						}
 					else
 						{
+						#ifdef DEBUG
 						printf("ERROR BD\n");
+						#endif
 						}
 
 					break;
@@ -262,15 +282,19 @@ void *cliente (void *arg) {
 				{
 					if(deleteWorker(sdc)==1)
 					{
+						#ifdef DEBUG
 						printf("---Worker desconectado---\n");
+						#endif
 
-						pthread_mutex_lock (&mClient);
+						pthread_mutex_lock (&mWorker);
 						workers--;
-						pthread_cond_signal (&cClient);
-						pthread_mutex_unlock (&mClient);
+						pthread_cond_signal (&cWorker);
+						pthread_mutex_unlock (&mWorker);
 					}
 					{
-					printf("ERROR BD\n");
+						#ifdef DEBUG
+						printf("ERROR BD\n");
+						#endif
 					}
 
 					break;
@@ -287,27 +311,25 @@ void *cliente (void *arg) {
 
 void *showServerInfo(void *arg){
 
+	#ifdef DEBUG
 	printf("CREO EL THREAD INFO");
-  while (1) {
-
-		pthread_mutex_lock (&mClient);
-    pthread_mutex_lock (&mWorker);
-		pthread_cond_wait(&cClient,&mClient);
-    pthread_cond_wait(&cWorker,&mWorker);
-
+	#endif
+	while (1) {
 		system("clear");
 		printf("----------------------------------------------------------------------\n");
     printf("-----------------------------Server MTZ-------------------------------\n");
     printf("----------------------------------------------------------------------\n");
     printf("\n");
+		//pthread_mutex_lock (&mClient);
+		//pthread_cond_wait(&cClient,&mClient);
     printf("Clientes Conectados:%i\n\n",clients);
-    printf("Workers Conectados:%i\n",workers);
+		//pthread_mutex_unlock (&mClient);
+		//pthread_mutex_lock (&mWorker);
+    //pthread_cond_wait(&cWorker,&mWorker);
+		printf("Workers Conectados:%i\n",workers);
+		//pthread_mutex_unlock (&mWorker);
+
 		fflush(stdout);
 		sleep(1);
-
-
-		pthread_mutex_unlock (&mClient);
-    pthread_mutex_unlock (&mWorker);
-
 	  }
 }
