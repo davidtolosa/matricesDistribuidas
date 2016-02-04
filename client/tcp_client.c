@@ -79,6 +79,8 @@ int main(int argc, char *argv[]) {
 
 	}
 
+
+	
 	while ((n!=0)) {
 
 		protocoloMTZ *mjs;
@@ -107,6 +109,8 @@ int main(int argc, char *argv[]) {
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
 						#endif
+						showWorkerInfo();
+						
 						/*Una vez que el worker se encuentra registrado en el servidor*/
 						/*este pregunta si hay tareas para realizar.*/
 						askForWork(sd);
@@ -151,6 +155,11 @@ int main(int argc, char *argv[]) {
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
 						#endif
+						
+						sleep(1);
+						askForWork(sd);
+															
+						
 						break;
 					}
 				case ASIGNACION_TRABAJO_SUMA:

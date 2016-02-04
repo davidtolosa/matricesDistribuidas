@@ -216,9 +216,9 @@ void *cliente (void *arg) {
 						printf("Worker dice:%s\n", mjs->body.mensage);
 						#endif
 
-						while (getSendWork(sdc,&id_suboper_worker)!=1) {
-							sleep(2);
-						}
+						getSendWork(sdc,&id_suboper_worker);
+						sleep(1);
+						
 
 						#ifdef DEBUG
 						printf("ID SUBOPERACION WORKER:%i\n",id_suboper_worker);
