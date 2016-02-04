@@ -103,11 +103,17 @@ int main(int argc, char *argv[]) {
 					}
 				case ACK_WORKER_REGISTER:
 					{
+						#ifdef DEBUG
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
+						#endif
 						/*Una vez que el worker se encuentra registrado en el servidor*/
 						/*este pregunta si hay tareas para realizar.*/
 						askForWork(sd);
+
+						int mensajeClient = SIN_TRABAJOS;
+						//Lanzo un thread para poder visualizar la barra de cargando
+						pthread_create (&charger, NULL, progresBar,&mensajeClient);
 
 						break;
 					}
@@ -116,37 +122,56 @@ int main(int argc, char *argv[]) {
 						/*El server recibio las matrices y esta operando con ellas*/
 /*						printf("\n Server say: %s\n", mjs->body.mensage);*/
 /*						printf("--------------------------------\n");*/
-
+						int mensajeClient = ACK_OPERACION;
 						//Lanzo un thread para poder visualizar la barra de cargando
-						pthread_create (&charger, NULL, progresBar, NULL);
+						pthread_create (&charger, NULL, progresBar,&mensajeClient);
 
 						break;
 					}
 				case ACK_OPERACION_WORKER:
 					{
-
+						#ifdef DEBUG
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
+						#endif
+
+						pthread_cancel(charger);
+
 						askForWork(sd);
+
+						int mensajeClient = SIN_TRABAJOS;
+						//Lanzo un thread para poder visualizar la barra de cargando
+						pthread_create (&charger, NULL, progresBar,&mensajeClient);
 
 						break;
 					}
 				case SIN_TRABAJOS:
 					{
+						#ifdef DEBUG
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
-
+						#endif
 						break;
 					}
 				case ASIGNACION_TRABAJO_SUMA:
 					{
+						#ifdef DEBUG
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
+						#endif
+
+						pthread_cancel(charger);
 
 						char* resultado = NULL;
 						resultado = solverOperation(mjs->body.mensage, ASIGNACION_TRABAJO_SUMA);
 
+						int mensajeClient = ASIGNACION_TRABAJO_SUMA;
+						//Lanzo un thread para poder visualizar la barra de cargando
+						pthread_create (&charger, NULL, progresBar,&mensajeClient);
+
 						enviar_mensaje(sd , RESULTADO_TRABAJO, resultado);
+						pthread_cancel(charger);
+
 
 						if(resultado)
 							free(resultado);
@@ -155,13 +180,22 @@ int main(int argc, char *argv[]) {
 					}
 				case ASIGNACION_TRABAJO_RESTA:
 					{
+						#ifdef DEBUG
 						printf("Server say: %s\n", mjs->body.mensage);
 						printf("--------------------------------\n");
+						#endif
+
+						pthread_cancel(charger);
 
 						char* resultado = NULL;
 						resultado = solverOperation(mjs->body.mensage, ASIGNACION_TRABAJO_RESTA);
 
+						int mensajeClient = ASIGNACION_TRABAJO_RESTA;
+						//Lanzo un thread para poder visualizar la barra de cargando
+						pthread_create (&charger, NULL, progresBar,&mensajeClient);
+
 						enviar_mensaje(sd , RESULTADO_TRABAJO, resultado);
+						pthread_cancel(charger);
 
 						if(resultado)
 							free(resultado);

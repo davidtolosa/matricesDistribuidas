@@ -59,6 +59,7 @@ int showConsole(int sd)
 			/*Obtengo las cadenas para poder procesarlas	*/
 			file1 = strtok (NULL," ");
 			file2 = strtok (NULL," ");
+
 			printf( "FILE 1 : %s\n", file1 );
 			printf( "FILE 2 : %s\n", file2 );
 
@@ -317,8 +318,10 @@ char* solverOperation (char *values, int op)
 	char* vec1 = strtok(values,";");
 	char* vec2 = strtok(NULL,";");
 
+	#ifdef DEBUG
 	printf("VEC 1 : %s \n", vec1);
 	printf("VEC 2 : %s \n", vec2);
+	#endif
 
 	char** elements_m1 =NULL;
 	char** elements_m2 =NULL;
@@ -359,13 +362,16 @@ char* solverOperation (char *values, int op)
 		//solicito mas memoria para el resultado
 		result = (char * ) realloc (result, size );
 		//concateno los valores
+		#ifdef DEBUG
 		printf("FILA %i  :A %s  +- B %s = %f \n",  count ,*(elements_m1 + count),*(elements_m2 + count),value);
-
+		#endif
 		strcat(result,element_result);
 
 		count++;
 	}
+		#ifdef DEBUG
 		printf ("resultado: %s \n",result);
+		#endif
 		return result;
 }
 
@@ -402,36 +408,64 @@ Retorna:
 */
 void *progresBar (void *arg)
 {
+
+	char mensaje[50];
+
+	//int select =
+
+	switch (*( (int *) arg)) {
+		case ACK_OPERACION:
+				{
+					strcpy(mensaje,"Los workers conectados estan resolviendo su operación");
+					break;
+				}
+		case ASIGNACION_TRABAJO_SUMA:
+				{
+					strcpy(mensaje,"Realizando Operacion Suma");
+					break;
+				}
+		case ASIGNACION_TRABAJO_RESTA:
+						{
+							strcpy(mensaje,"Realizando Operacion Resta");
+							break;
+						}
+		case SIN_TRABAJOS:
+						{
+							strcpy(mensaje,"Esperando Trabajo");
+							break;
+						}
+		default:
+			break;
+		}
+
 	while(1)
 	{
 		//system("clear");
  		printf("\033[A\033[K");
- 		printf ("Processing\n");
+ 		printf ("%s\n",mensaje);
  		fflush(stdout);
  		sleep(1);
 
 		//system("clear");
  		printf("\033[A\033[K");
- 		printf ("Processing.\n");
+ 		printf ("%s.\n",mensaje);
  		fflush(stdout);
  		sleep(1);
  		printf("\033[A\033[K");
  		//system("clear");
- 		printf ("Processing..\n");
+ 		printf ("%s..\n",mensaje);
  		fflush(stdout);
  		sleep(1);
  		printf("\033[A\033[K");
  		//system("clear");
- 		printf ("Processing...\n");
+ 		printf ("%s...\n",mensaje);
  		fflush(stdout);
  		sleep(1);
  		//system("clear");
  		printf("\033[A\033[K");
- 		printf ("Processing..\n");
+ 		printf ("%s..\n",mensaje);
  		fflush(stdout);
 		sleep(1);
  		//system("clear");
-
 	}
-
 }

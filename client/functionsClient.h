@@ -14,3 +14,4 @@ char** split_delim (char* string,  char* delim);
 char* solverOperation (char *values, int op);
 int saveResult(char* result);
 void *progresBar (void *arg);
+void showWorkerInfo();
