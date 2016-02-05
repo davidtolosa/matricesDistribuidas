@@ -320,7 +320,7 @@ int getSendWork(int sdc,int *id_suboper)
       #ifdef DEBUG
       printf("No hay trabajo para el worker%i\n",sdc);
       #endif
-    //  enviar_mensaje(sdc, SIN_TRABAJOS, "Aun no tengo Trabajos");
+      enviar_mensaje(sdc, SIN_TRABAJOS, "Aun no tengo Trabajos");
 
       return 0;
     }
