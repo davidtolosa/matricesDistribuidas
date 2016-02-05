@@ -3,7 +3,7 @@
 #include <string.h>
 #include <sqlite3.h>
 #include "../db/DBManager.h"
-#define DEBUG
+//#define DEBUG
 
 //DEFINICIONES DE LAS FUNCIONES EL SERVER
 //.....................................................
@@ -20,3 +20,6 @@ int createOperation(char *buffer, int id_cli, int id_ope);
 int saveResult(char *resultado, int id_suboperacion);
 int setWorkerOperation(int id_worker,int id_suboperacion);
 char* checkEndOperation(int id_cliente);
+
+//Esta funcion la creo para desconectar a todos los clientes si no tengo workers
+int disconnetAllClient() ; //funcion de la muerte!

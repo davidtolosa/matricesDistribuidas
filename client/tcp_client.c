@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 	struct hostent *h;
 	char *datos = NULL;
 
-	pthread_t charger;
+	pthread_t charger,tid_console;
 
 	if (argc < 3) {
 		//printf("Debe ejecutar %s (nombre de host)\n",argv[0]);
@@ -96,10 +96,7 @@ int main(int argc, char *argv[]) {
 						//printf("Server say: %s\n", mjs->body.mensage);
 						//printf("--------------------------------\n");
 
-						showHelpClient();
-
-						if(showConsole(sd)<0)
-							n=0;
+						pthread_create ( &tid_console, NULL, showConsole, &sd );
 
 						break;
 					}
@@ -227,12 +224,26 @@ int main(int argc, char *argv[]) {
 						//almaceno el resultado en un archivo.
 						saveResult(mjs->body.mensage);
 
-						if(showConsole(sd)<0)
-							n=0;
+						
+						
 
 						break;
 					}
-
+			case NO_WORKER_DISPONIBLES:
+					{
+						sleep(1);
+						system("clear");
+						printf("----------------------------------------------------------------------\n");
+						printf("--------------------------Bienvenido a MTZ----------------------------\n");
+						printf("----------------------------------------------------------------------\n");
+						
+						printf("El server no cuenta con colaboradores, por lo que no podra atender su solicitud.\n");
+						printf("Intentelo nuevamente mas tarde.\n");
+						
+						n=0;
+							
+						break;
+					}
 				default:
 					break;
 				}
@@ -246,7 +257,7 @@ int main(int argc, char *argv[]) {
 
 
 	}
-	printf("Desconectado del servidor\n");
+	printf("Se ah desconectado del servidor.\n");
 
 	close(sd);
 

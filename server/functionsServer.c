@@ -445,3 +445,58 @@ char* checkEndOperation(int id_cliente){
       return resultado;
 	  }
 }
+/*
+FUNCION
+Descipcion :
+Nombre :
+Recibe:
+Retorna:
+*/
+
+
+int disconnetAllClient()
+{
+	sqlite3_stmt *stmt;
+	char query[256];
+	int retval;
+	
+	char* resultado = 0;
+	int size = 0;
+	
+	sqlite3 *handle =db_openDB(SQLITE_OPEN_READONLY);
+	
+	sprintf(query,"SELECT id_cliente FROM cliente;");
+	
+	if( (retval = db_selectDB(handle, query, &stmt)) != SQLITE_ERROR)
+	{
+		while((retval = db_fetchDB(stmt)) == SQLITE_ROW )
+		{
+			//obtengo todos los descriptores de la DB y empiezo a desconectarlos
+			enviar_mensaje(sqlite3_column_int(stmt,0), NO_WORKER_DISPONIBLES, "Hola Cliente. No hay workers disponibles, intente mas tarde.\n");
+			
+		}
+		
+		if( retval != SQLITE_DONE ) {
+			#ifdef DEBUG
+			printf("ERROR : %i \n",retval);
+			#endif
+			sqlite3_finalize(stmt);
+			db_closeDB(handle);
+			#ifdef DEBUG
+			printf("Ocurrio un error con la BD. \n");
+			#endif
+		}
+		return 1;
+	}
+	else
+		{
+			sqlite3_finalize(stmt);
+			db_closeDB(handle);
+			#ifdef DEBUG
+			printf("Ocurrio un error con la BD. \n");
+			#endif
+			return 0;
+		}
+	
+	
+}

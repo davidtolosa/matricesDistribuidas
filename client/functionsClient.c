@@ -32,8 +32,11 @@ Nombre :
 Recibe:
 Retorna:
 */
-int showConsole(int sd)
+void *showConsole(void *arg)
 {
+	
+	int sd = *( (int *) arg);
+	
 	int showConsole=1;
 	int exit = 0;
 	char teclado[256];
@@ -45,6 +48,8 @@ int showConsole(int sd)
 	char* m2 = NULL;
 	char* buffer= NULL;
 
+	showHelpClient();
+	
 	while( showConsole !=0)
 	{
 		printf( "$ > ");
@@ -131,7 +136,7 @@ int showConsole(int sd)
 				}
 				else if( strcmp(operacion, "SALIR")==0)
 				{
-					exit=1;
+					
 					showConsole=0;
 
 					//--------------------------------------------------
@@ -158,10 +163,6 @@ int showConsole(int sd)
 	if( buffer)
 		free( buffer);
 
-	if(exit==1)
-		return -1;
-	else
-		return 0;
 }
 
 /*

@@ -7,7 +7,7 @@ SERVER
 
 	
 	CORRERLO
-		./build/server localhost
+		../build/server localhost
 
 
 CLIENTE

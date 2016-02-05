@@ -19,6 +19,7 @@ void slot_closeMTZ ( int signal)
 {
 	printf("Se ha precionado Ctrl-c \n");
 	signalClose=1;
+	exit(signal);
 }
 
 void *cliente (void *);
@@ -31,10 +32,10 @@ pthread_cond_t cClient;
 pthread_mutex_t mWorker;
 pthread_cond_t cWorker;
 
-int main() {
+int main(int argc, char *argv[]) {
 
 	//Signal para cerrar la app
-	//signal(SIGINT, slot_closeMTZ);
+	signal(SIGINT, slot_closeMTZ);
 	signalClose=0;
 
 	int lon;
@@ -121,17 +122,18 @@ void *cliente (void *arg) {
 					#endif
 
 					threadType = SOLICITUD_CLIENTE;
-
+					
+					pthread_mutex_lock (&mClient);
+					clients++;
+					pthread_cond_signal (&cClient);
+					pthread_mutex_unlock (&mClient);
+					
 					if(workers>0)
 					{
 						//Cuando un cliente se conecta.
 						newClient(sdc);
 						enviar_mensaje(sdc, ACK_CLIENTE_REGISTER, "Hola Cliente. Espero sus actividades\n");
 
-						pthread_mutex_lock (&mClient);
-						clients++;
-						pthread_cond_signal (&cClient);
-						pthread_mutex_unlock (&mClient);
 
 					}
 					else
@@ -298,6 +300,8 @@ void *cliente (void *arg) {
 						workers--;
 						pthread_cond_signal (&cWorker);
 						pthread_mutex_unlock (&mWorker);
+						if(workers==0)
+							disconnetAllClient();
 					}
 					{
 						#ifdef DEBUG
@@ -323,8 +327,8 @@ void *showServerInfo(void *arg){
 	printf("CREO EL THREAD INFO");
 	#endif
 	while (1) {
-		system("clear");
-		printf("----------------------------------------------------------------------\n");
+	system("clear");
+	printf("----------------------------------------------------------------------\n");
     printf("-----------------------------Server MTZ-------------------------------\n");
     printf("----------------------------------------------------------------------\n");
     printf("\n");
