@@ -138,6 +138,7 @@ void *showConsole(void *arg)
 				{
 					
 					showConsole=0;
+					raise(SIGINT);
 
 					//--------------------------------------------------
 					//END RESTA

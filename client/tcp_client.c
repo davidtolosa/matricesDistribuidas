@@ -153,7 +153,7 @@ int main(int argc, char *argv[]) {
 						printf("--------------------------------\n");
 						#endif
 						
-						sleep(1);
+						
 						askForWork(sd);
 															
 						
@@ -169,12 +169,12 @@ int main(int argc, char *argv[]) {
 						pthread_cancel(charger);
 
 						char* resultado = NULL;
-						resultado = solverOperation(mjs->body.mensage, ASIGNACION_TRABAJO_SUMA);
+						
 
 						int mensajeClient = ASIGNACION_TRABAJO_SUMA;
 						//Lanzo un thread para poder visualizar la barra de cargando
 						pthread_create (&charger, NULL, progresBar,&mensajeClient);
-
+						resultado = solverOperation(mjs->body.mensage, ASIGNACION_TRABAJO_SUMA);
 						enviar_mensaje(sd , RESULTADO_TRABAJO, resultado);
 						pthread_cancel(charger);
 
@@ -194,12 +194,12 @@ int main(int argc, char *argv[]) {
 						pthread_cancel(charger);
 
 						char* resultado = NULL;
-						resultado = solverOperation(mjs->body.mensage, ASIGNACION_TRABAJO_RESTA);
+						
 
 						int mensajeClient = ASIGNACION_TRABAJO_RESTA;
 						//Lanzo un thread para poder visualizar la barra de cargando
 						pthread_create (&charger, NULL, progresBar,&mensajeClient);
-
+						resultado = solverOperation(mjs->body.mensage, ASIGNACION_TRABAJO_RESTA);
 						enviar_mensaje(sd , RESULTADO_TRABAJO, resultado);
 						pthread_cancel(charger);
 
@@ -223,9 +223,9 @@ int main(int argc, char *argv[]) {
 
 						//almaceno el resultado en un archivo.
 						saveResult(mjs->body.mensage);
-
-						
-						
+		
+						printf("\nGracias por utilizar nuestra aplicacion.\n");
+						n=0;
 
 						break;
 					}
