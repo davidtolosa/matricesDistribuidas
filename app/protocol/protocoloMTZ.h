@@ -6,7 +6,6 @@ En este archivo se define el protocolo de alto nivel para comunicar nuestra app.
 #include <stdlib.h>
 #include <string.h>
 #include <arpa/inet.h>
-//#define DEBUG
 
 //CODIGOS DE LOS MENSAJES
 //....................................................

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <sqlite3.h>
-#define DEBUG
 
 //FUNCIONES PARA EL MANEJO DE LA BD
 
